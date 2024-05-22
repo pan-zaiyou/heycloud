@@ -23,7 +23,7 @@ const ShadowrocketButton: React.FC = () => {
       const url = new URL(subscribeInfo.subscribe_url);
       url.searchParams.set("flag", "shadowrocket");
       window.open(
-        `shadowrocket://add/sub://${Base64Encode(url.toString())}?remark=${encodeURIComponent(config.title)}`,
+        `shadowrocket://add/sub://${Base64Encode(url.toString())}?remark=${encodeURIComponent(config.title:跨越长城)}`,
         "_self"
       );
 
