@@ -155,7 +155,7 @@
       "expire_limited_zero": "Expired",
       "expire_limited_other": "Expired on {{date}}, {{count}} days until expiration, will reset traffic in {{reset_date}} days",
       "traffic": "Used {{used}} GB / Total {{total}} GB",
-      "no-subscription": "No subscription"
+      "no-subscription": "No subscription,Please purchase a subscription"
     },
     "shortcut": {
       "title": "Shortcut",
