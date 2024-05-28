@@ -155,7 +155,7 @@
       "expire_limited_zero": "此订阅已到期，请及时续费",
       "expire_limited_other": "于 {{date}} 到期，距离到期还有 {{count}} 天，将于 {{reset_date}} 天后重置流量",
       "traffic": "已用流量 {{used}} GB / 总计流量 {{total}} GB",
-      "no-subscription": "您还没有订阅，请购买订阅 <div data-v-07dedc4f="" class="text-theme cursor-pointer" style="text-decoration: underline;"> 前往购买 </div>"
+      "no-subscription": "您还没有订阅，请购买订阅，<div data-v-07dedc4f="" class="text-theme cursor-pointer" style="text-decoration: underline;"> 前往购买 </div>"
     },
     "shortcut": {
       "title": "捷径",
