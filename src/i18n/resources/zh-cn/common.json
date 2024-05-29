@@ -53,6 +53,9 @@
     "submit": "登录",
     "go-register": "没有账户？注册一个",
     "forgot_password": "忘记密码？"
+    return [
+    'reset' => '您的密码已成功重置！请使用新密码登录。',
+];
   },
   "register": {
     "title": "注册",
