@@ -144,7 +144,7 @@
   },
   "dashboard": {
     "announcement": {
-      "chip": "公告",
+      "chip": "公告栏",
       "title": "公告栏"
     },
     "subscription-card": {
