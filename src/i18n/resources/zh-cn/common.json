@@ -144,8 +144,8 @@
   },
   "dashboard": {
     "announcement": {
-      "chip": "公告栏",
-      "title": "公告栏"
+      "chip": "公告",
+      "title": "公告"
     },
     "subscription-card": {
       "title": "我的订阅",
