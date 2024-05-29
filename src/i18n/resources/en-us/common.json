@@ -148,7 +148,7 @@
       "title": "Announcement"
     },
     "subscription-card": {
-      "title": "Subscription",
+      "title": "My Subscription",
       "description": "You can view the subscription information here",
       "plan": "Plan",
       "expire_forever": "Never Expire",
