@@ -26,7 +26,7 @@ const config: DefaultConfigProps = {
   miniDrawer: false,
   container: true,
   themeDirection: "ltr",
-  title: "MANTIS",
+  title: "跨越长城",
   title_split: " - ",
   background_url: "https://unsplash.com/random",
   description: "天下武功 唯快不破",
