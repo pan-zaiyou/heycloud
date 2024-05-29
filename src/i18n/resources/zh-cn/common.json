@@ -125,7 +125,7 @@
     "password_confirm_required": "您必须再次输入密码",
     "submit": "重置密码"
     "return": [
-    "reset" => "您的密码已成功重置！请使用新密码登录",
+    "reset": "您的密码已成功重置！请使用新密码登录",
   },
   "auth": {
     "captcha": {
