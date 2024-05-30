@@ -124,7 +124,7 @@
     "password_confirm_invalid": "您两次输入的密码不一致",
     "password_confirm_required": "您必须再次输入密码",
     "submit": "重置密码",
-    "success": "您的密码已成功重置！请使用新密码登录
+    "return": "您的密码已成功重置！请使用新密码登录
   },
   "auth": {
     "captcha": {
