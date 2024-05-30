@@ -37,7 +37,6 @@
     "footer": {
       "copyright": "© {{date}} <0>CROSSWALL NETWORK</0> 版权所有",
       "contact-us": "联系我们"
-    }
   },
   "login": {
     "title": "登录",
