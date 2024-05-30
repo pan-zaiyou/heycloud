@@ -37,6 +37,7 @@
     "footer": {
       "copyright": "© {{date}} <0>CROSSWALL NETWORK</0> 版权所有",
       "contact-us": "联系我们"
+      }
   },
   "login": {
     "title": "登录",
@@ -132,10 +133,7 @@
       "error_null_token": "出现错误，Token 为空，请重试"
     },
     "footer": {
-      "copyright": "© {{date}} <0>CROSSWALL NETWORK</0> 版权所有",
-      "links": {
-        "terms": "服务协议",
-        "privacy": "隐私政策"
+      "copyright": "© {{date}} <0>CROSSWALL NETWORK</0> 版权所有"
       }
     }
   },
