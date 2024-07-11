@@ -17,8 +17,8 @@ const Register: React.FC = () => {
 
   return (
     <AuthWrapper>
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -33,7 +33,7 @@ const Register: React.FC = () => {
             </Typography>
           </Stack>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <AuthRegister />
         </Grid>
       </Grid>
