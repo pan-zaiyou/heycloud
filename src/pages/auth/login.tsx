@@ -17,8 +17,8 @@ const Login: React.FC = () => {
 
   return (
     <AuthWrapper>
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
             </Typography>
           </Stack>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <AuthLogin />
         </Grid>
       </Grid>
