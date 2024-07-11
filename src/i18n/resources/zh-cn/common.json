@@ -165,11 +165,11 @@
         "secondary": "查看使用教程以了解如何使用本站服务"
       },
       "subscribe": {
-        "primary": "一键订阅",
-        "secondary": "快速将节点导入对应客户端进行使用",
-        "copy": "复制订阅链接",
+        "primary": "一键导入到软件",
+        "secondary": "快速将配置导入到对应客户端进行使用",
+        "copy": "复制配置链接",
         "scan": "扫描二维码",
-        "scan_tips": "使用支持扫码的客户端进行订阅",
+        "scan_tips": "使用支持扫码的客户端扫码导入配置",
         "clash": "导入至 Clash",
         "clashx": "导入至 ClashX",
         "surfboard": "导入至 Surfboard",
@@ -180,10 +180,10 @@
         "buy-button": "购买"
       },
       "purchase": {
-        "primary_purchased": "续费订阅",
-        "secondary_purchased": "续费订阅以继续使用服务",
-        "primary_not_purchased": "购买订阅",
-        "secondary_not_purchased": "购买订阅以使用服务"
+        "primary_purchased": "续费会员",
+        "secondary_purchased": "续费会员以继续使用服务",
+        "primary_not_purchased": "购买会员",
+        "secondary_not_purchased": "购买会员以使用服务"
       },
       "ticket": {
         "primary": "提交工单",
