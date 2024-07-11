@@ -148,14 +148,14 @@
       "title": "公告"
     },
     "subscription-card": {
-      "title": "我的订阅",
-      "description": "您的订阅信息",
+      "title": "我的套餐",
+      "description": "您的套餐信息",
       "plan": "计划",
       "expire_forever": "此订阅长期有效",
-      "expire_limited_zero": "此订阅已到期，请及时续费",
+      "expire_limited_zero": "此套餐已到期，请及时续费",
       "expire_limited_other": "于 {{date}} 到期，距离到期还有 {{count}} 天，将于 {{reset_date}} 天后重置流量",
       "traffic": "已用流量 {{used}} GB / 总计流量 {{total}} GB",
-      "no-subscription": "您还没有订阅，请先购买订阅"
+      "no-subscription": "您还没有套餐，请先购买"
     },
     "shortcut": {
       "title": "捷径",
@@ -180,10 +180,10 @@
         "buy-button": "购买"
       },
       "purchase": {
-        "primary_purchased": "续费会员",
-        "secondary_purchased": "续费会员以继续使用服务",
-        "primary_not_purchased": "购买会员",
-        "secondary_not_purchased": "购买会员以使用服务"
+        "primary_purchased": "套餐续费",
+        "secondary_purchased": "续费以继续使用服务",
+        "primary_not_purchased": "购买套餐",
+        "secondary_not_purchased": "购买套餐以使用服务"
       },
       "ticket": {
         "primary": "提交工单",
@@ -249,7 +249,7 @@
     },
     "plan": {
       "plan-info-card": {
-        "title": "购买订阅：{{name}}"
+        "title": "购买套餐：{{name}}"
       },
       "period-select-card": {
         "title": "付款周期",
@@ -464,7 +464,7 @@
         "plan_id_key": "套餐 ID",
         "plan_id_value": "{{count}}",
         "plan_id_value_zero": "无",
-        "plan_expired_at_key": "订阅过期时间",
+        "plan_expired_at_key": "套餐过期时间",
         "plan_expired_at_value": "{{date}}",
         "created_at_key": "创建时间",
         "created_at_value": "{{date}}"
@@ -496,7 +496,7 @@
     },
     "notification-card": {
       "title": "通知设置",
-      "expired_notify_label": "订阅过期提醒",
+      "expired_notify_label": "套餐过期提醒",
       "traffic_notify_label": "流量用量提醒",
       "save-button": "保存"
     },
@@ -516,12 +516,12 @@
       "previous_step": "上一步"
     },
     "reset-subscription-card": {
-      "title": "重置订阅",
-      "alert": "当你的订阅地址或账户发生泄漏被他人滥用时，可以在此重置订阅信息。避免带来不必要的损失。",
-      "button": "重置订阅",
+      "title": "重置配置",
+      "alert": "当你的套餐配置或账户发生泄漏被他人滥用时，可以在此重置订阅信息。避免带来不必要的损失。",
+      "button": "重置配置",
       "dialog": {
-        "title": "确定要重置订阅信息？",
-        "content": "如果您的订阅地址或信息发生泄露可以执行此操作。重置后您的 UUID 及订阅将会变更，需要重新导入订阅。",
+        "title": "确定要重置配置信息？",
+        "content": "如果您的配置链接或信息发生泄露可以执行此操作。重置后您的 UUID 及订阅将会变更，需要重新导入订阅。",
         "cancel": "取消",
         "confirm": "确定"
       }
