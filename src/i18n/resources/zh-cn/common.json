@@ -44,7 +44,7 @@
   "login": {
     "title": "登录",
     "email": "邮箱",
-    "email_placeholder": "请输入您自己的邮箱",
+    "email_placeholder": "请输入您的邮箱",
     "email_required": "您必须输入邮箱",
     "email_invalid": "您输入的邮箱无效",
     "password": "密码",
@@ -57,7 +57,7 @@
   "register": {
     "title": "注册",
     "email": "邮箱",
-    "email_placeholder": "请输入您自己的邮箱",
+    "email_placeholder": "请输入您的邮箱",
     "email_required": "您必须输入邮箱",
     "email_invalid": "您输入的邮箱无效",
     "email_max": "邮箱长度不能超过 {{count}} 个字符",
@@ -96,7 +96,7 @@
     "title": "忘记密码",
     "back_to_login": "返回登录",
     "email": "邮箱",
-    "email_placeholder": "请输入您自己的邮箱",
+    "email_placeholder": "请输入您的邮箱",
     "email_required": "您必须输入邮箱",
     "email_invalid": "您输入的邮箱无效",
     "email_code": "邮箱验证码",
