@@ -395,7 +395,7 @@
         "title": "我的邀请",
         "currency": "CNY",
         "description": "当前剩余佣金",
-        "helperText": "邀请好友注册，您将获得邀请奖励，好友也将获得注册奖励。",
+        "helperText": "邀请好友注册，您将获得邀请奖励。",
         "transfer-button": "划转",
         "transfer-dialog": {
           "title": "推广佣金划转至余额",
