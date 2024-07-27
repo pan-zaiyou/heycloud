@@ -1,5 +1,7 @@
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// material-ui
 import {
   Box,
   Button,
@@ -16,12 +18,16 @@ import {
 import { useSnackbar } from "notistack";
 import { useTheme } from "@mui/material/styles";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+
+// third party
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useUnmountedRef } from "ahooks";
 import lo from "lodash-es";
 import OtpInput from "react18-input-otp";
 import { Trans, useTranslation } from "react-i18next";
+
+// project import
 import AnimateButton from "@/components/@extended/AnimateButton";
 import { useResetPasswordMutation } from "@/store/services/api";
 import SendMailButton from "@/sections/auth/auth-forms/SendMailButton";
@@ -29,6 +35,8 @@ import IconButton from "@/components/@extended/IconButton";
 import { StringColorProps } from "@/types/password";
 import { strengthColor, strengthIndicator } from "@/utils/password-strength";
 import ReactGA from "react-ga4";
+
+// ============================|| FIREBASE - FORGOT PASSWORD ||============================ //
 
 const AuthForgotPassword = () => {
   const theme = useTheme();
@@ -110,7 +118,6 @@ const AuthForgotPassword = () => {
                   email: values.email,
                   success: true
                 });
-                console.log("Navigating to login");
                 navigate("/login", { replace: true });
               }
             })
@@ -139,6 +146,7 @@ const AuthForgotPassword = () => {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setValues }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
+              {/* Email */}
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="email">
@@ -164,6 +172,7 @@ const AuthForgotPassword = () => {
                   )}
                 </Stack>
               </Grid>
+              {/* Email Code */}
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="email-code-signup">
@@ -209,6 +218,8 @@ const AuthForgotPassword = () => {
                   )}
                 </Stack>
               </Grid>
+
+              {/* Password */}
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="password-signup">
@@ -264,6 +275,7 @@ const AuthForgotPassword = () => {
                   </Grid>
                 </FormControl>
               </Grid>
+              {/* Password Confirm */}
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="password-confirm">
