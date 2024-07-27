@@ -30,7 +30,7 @@ const config: DefaultConfigProps = {
   title_split: " - ",
   background_url: "https://unsplash.com/random",
   description: "天下武功 唯快不破",
-  logo: "<img src={config.logo} alt="Logo" />",
+  logo: require('./assets/images/logo.png'),
   api: "https://sub.heycloud.club",
   languages: ["zh-CN", "en-US"],
   googleAnalytics: {
