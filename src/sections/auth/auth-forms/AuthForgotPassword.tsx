@@ -107,7 +107,7 @@ const AuthForgotPassword = () => {
           })
             .unwrap()
             .then(() => {
-              if (scriptedRef.current) {
+              if (!scriptedRef.current) {
                 setStatus({ success: true });
                 setSubmitting(false);
                 enqueueSnackbar(t("notice::forgot_password.reset_success"), {
