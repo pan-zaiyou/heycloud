@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+  // if using synchronous loading, will be called once the DOM is ready
+turnstile.ready(function () {
+    turnstile.render('#example-container', {
+        sitekey: '<0x4AAAAAAAgLULCGELX08Ia8>',
+        callback: function(token) {
+            console.log(`Challenge Success ${token}`);
+        },
+    });
+});
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8" />
   <link href="/favicon.svg" rel="icon" />
