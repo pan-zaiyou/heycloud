@@ -11,7 +11,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 // project import
 import IconButton from "@/components/@extended/IconButton";
-import { useGetGuestConfigQuery, useSendEmailVerifyMutation } from "@/store/services/api";
+import { useGetGuestConfigQuery, useSendEmailVerifyMutation, useCheckAccountExistsMutation } from "@/store/services/api";
 
 // assets
 import { SendOutlined } from "@ant-design/icons";
@@ -25,11 +25,57 @@ export interface SendMailButtonProps {
 
 export const SendMailWithCaptchaButton: React.FC<SendMailButtonProps> = ({ email }) => {
   const { data: guestConfig } = useGetGuestConfigQuery();
-  const [sendEmailVerify, { isLoading }] = useSendEmailVerifyMutation();
+  const [sendEmailVerify, { isLoading: isSending }] = useSendEmailVerifyMutation();
+  const [checkAccountExists, { isLoading: isChecking }] = useCheckAccountExistsMutation();
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
   const [open, setOpen] = React.useState(false);
+
+  const handleSendEmail = (token: string | null) => {
+    if (lo.isNull(token)) {
+      enqueueSnackbar(t("auth.captcha.error_null_token"), { variant: "error" });
+      return;
+    }
+
+    checkAccountExists({ email })
+      .unwrap()
+      .then((exists) => {
+        if (exists) {
+          sendEmailVerify({ email, recaptcha_data: token! })
+            .unwrap()
+            .then(() => {
+              enqueueSnackbar(t("auth.captcha.success"), { variant: "success" });
+              ReactGA.event("send_email_verify", {
+                category: "auth",
+                label: "send_email_verify",
+                email: email,
+                success: true,
+              });
+            })
+            .catch((err) => {
+              console.error(err);
+              enqueueSnackbar(t("auth.captcha.error"), { variant: "error" });
+              ReactGA.event("send_email_verify", {
+                category: "auth",
+                label: "send_email_verify",
+                email: email,
+                success: false,
+                error: err,
+              });
+            })
+            .finally(() => {
+              setOpen(false);
+            });
+        } else {
+          enqueueSnackbar(t("auth.account_not_found"), { variant: "error" });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        enqueueSnackbar(t("auth.check_account_error"), { variant: "error" });
+      });
+  };
 
   return (
     <>
@@ -39,7 +85,7 @@ export const SendMailWithCaptchaButton: React.FC<SendMailButtonProps> = ({ email
           onClick={() => setOpen(true)}
           edge="end"
           color="secondary"
-          disabled={isLoading}
+          disabled={isSending || isChecking}
         >
           <SendOutlined />
         </IconButton>
@@ -51,38 +97,7 @@ export const SendMailWithCaptchaButton: React.FC<SendMailButtonProps> = ({ email
         <DialogContent>
           <ReCaptcha
             sitekey={guestConfig?.recaptcha_site_key!}
-            onChange={(token: string | null) => {
-              if (lo.isNull(token)) {
-                enqueueSnackbar(t("auth.captcha.error_null_token"), { variant: "error" });
-                return;
-              }
-
-              sendEmailVerify({ email, recaptcha_data: token! })
-                .unwrap()
-                .then(() => {
-                  enqueueSnackbar(t("auth.captcha.success"), { variant: "success" });
-                  ReactGA.event("send_email_verify", {
-                    category: "auth",
-                    label: "send_email_verify",
-                    email: email,
-                    success: true
-                  });
-                })
-                .catch((err) => {
-                  console.error(err);
-                  enqueueSnackbar(t("auth.captcha.error"), { variant: "error" });
-                  ReactGA.event("send_email_verify", {
-                    category: "auth",
-                    label: "send_email_verify",
-                    email: email,
-                    success: false,
-                    error: err
-                  });
-                })
-                .finally(() => {
-                  setOpen(false);
-                });
-            }}
+            onChange={handleSendEmail}
           />
         </DialogContent>
       </Dialog>
@@ -91,21 +106,35 @@ export const SendMailWithCaptchaButton: React.FC<SendMailButtonProps> = ({ email
 };
 
 const SendMailButton: React.FC<SendMailButtonProps> = ({ email }) => {
-  const [sendMail, { isLoading }] = useSendEmailVerifyMutation();
+  const [sendMail, { isLoading: isSending }] = useSendEmailVerifyMutation();
+  const [checkAccountExists, { isLoading: isChecking }] = useCheckAccountExistsMutation();
   const { data: siteConfig } = useGetGuestConfigQuery();
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
   const handleSendEmailCode = () => {
     console.log("send email code");
-    sendMail({ email })
+
+    checkAccountExists({ email })
       .unwrap()
-      .then(() => {
-        enqueueSnackbar(t("auth.captcha.success"), { variant: "success" });
+      .then((exists) => {
+        if (exists) {
+          sendMail({ email })
+            .unwrap()
+            .then(() => {
+              enqueueSnackbar(t("auth.captcha.success"), { variant: "success" });
+            })
+            .catch((err) => {
+              console.error(err);
+              enqueueSnackbar(t("auth.captcha.error"), { variant: "error" });
+            });
+        } else {
+          enqueueSnackbar(t("auth.account_not_found"), { variant: "error" });
+        }
       })
       .catch((err) => {
         console.error(err);
-        enqueueSnackbar(t("auth.captcha.error"), { variant: "error" });
+        enqueueSnackbar(t("auth.check_account_error"), { variant: "error" });
       });
   };
 
@@ -119,7 +148,7 @@ const SendMailButton: React.FC<SendMailButtonProps> = ({ email }) => {
           onClick={handleSendEmailCode}
           edge="end"
           color="secondary"
-          disabled={isLoading}
+          disabled={isSending || isChecking}
         >
           <SendOutlined />
         </IconButton>
