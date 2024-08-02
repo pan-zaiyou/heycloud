@@ -96,7 +96,17 @@ const AuthLogin = () => {
               })
               .catch((err: any) => {
                 setStatus({ success: false });
-                setErrors(lo.isEmpty(err.errors) ? { submit: err.message } : err.errors);
+                const errorMessages = lo.isEmpty(err.errors) ? { submit: err.message } : err.errors;
+
+                // 检查错误信息并设置相应的错误消息
+                if (err.message.includes("账号")) {
+                  setErrors({ email: t("email_error").toString() });
+                } else if (err.message.includes("密码")) {
+                  setErrors({ password: t("password_error").toString() });
+                } else {
+                  setErrors(errorMessages);
+                }
+
                 ReactGA.event("login", {
                   category: "auth",
                   label: "login",
@@ -155,7 +165,7 @@ const AuthLogin = () => {
                     fullWidth
                     color={capsWarning ? "warning" : "primary"}
                     error={Boolean(touched.password && errors.password)}
-                    id="-password-login"
+                    id="password-login"
                     type={showPassword ? "text" : "password"}
                     value={values.password}
                     name="password"
