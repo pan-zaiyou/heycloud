@@ -29,7 +29,8 @@ import { Trans, useTranslation } from "react-i18next";
 
 // project import
 import AnimateButton from "@/components/@extended/AnimateButton";
-import { useResetPasswordMutation, useCheckEmailExistsMutation, useSendVerificationCodeMutation } from "@/store/services/api";
+import { useResetPasswordMutation } from "@/store/services/api";
+import SendMailButton from "@/sections/auth/auth-forms/SendMailButton";
 import IconButton from "@/components/@extended/IconButton";
 import { StringColorProps } from "@/types/password";
 import { strengthColor, strengthIndicator } from "@/utils/password-strength";
@@ -45,9 +46,9 @@ const AuthForgotPassword = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [resetPassword] = useResetPasswordMutation();
+
   const [level, setLevel] = useState<StringColorProps>();
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -92,9 +93,26 @@ const AuthForgotPassword = () => {
             .required(t("forgot_password.email_code_required").toString())
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setStatus({ success: null });
+          setSubmitting(true);
+
+          // Check if the email and OTP code have correct values
+          if (!values.email) {
+            setErrors({ email: t("forgot_password.email_required").toString() });
+            setSubmitting(false);
+            return;
+          }
+
           if (values.email_code.length !== 6) {
-            setStatus({ success: false });
             setErrors({ email_code: t("forgot_password.email_code_invalid").toString() });
+            setSubmitting(false);
+            return;
+          }
+
+          // Check password strength before submitting
+          if (strengthIndicator(values.password) < 3) { // Assuming 3 is a minimum strength level
+            setErrors({ password: t("forgot_password.password_weak").toString() });
+            setSubmitting(false);
             return;
           }
 
@@ -107,7 +125,6 @@ const AuthForgotPassword = () => {
             .then(() => {
               if (!scriptedRef.current) {
                 setStatus({ success: true });
-                setSubmitting(false);
                 enqueueSnackbar(t("notice::forgot_password.reset_success"), {
                   variant: "success"
                 });
@@ -121,11 +138,12 @@ const AuthForgotPassword = () => {
               }
             })
             .catch((err: any) => {
-              console.error("Error in reset password", err);
-              if (scriptedRef.current) {
+              if (!scriptedRef.current) {
                 setStatus({ success: false });
                 setErrors(err.errors || { submit: err.message });
-                setSubmitting(false);
+                enqueueSnackbar(t("notice::forgot_password.reset_failed"), {
+                  variant: "error"
+                });
                 ReactGA.event("reset_password", {
                   category: "auth",
                   label: "reset_password",
@@ -290,7 +308,6 @@ const AuthForgotPassword = () => {
                     onBlur={handleBlur}
                     onChange={(e) => {
                       handleChange(e);
-                      handlePasswordChange(e.target.value);
                     }}
                     autoComplete={"new-password"}
                     placeholder="******"
