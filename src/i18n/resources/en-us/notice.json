@@ -5,7 +5,8 @@
   "send_email_code_fail": "Failed to send email verification code",
   "remind_check_trash_box": "Please check your trash box",
   "forgot_password": {
-    "reset_success": "Password reset successfully"
+    "reset_success": "Password reset successfully",
+    "reset_failed": "Password reset failed"
   },
   "logout_success": "Logout succeeded",
   "logout_fail": "Logout failed",
