@@ -1,4 +1,3 @@
-// material-ui
 import { useTheme } from '@mui/material/styles';
 // import logoDark from 'assets/images/logo-dark.svg';
 // import logo from 'assets/images/logo.svg';
@@ -23,8 +22,16 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
      *
      */
     <>
-      <img src={theme.palette.mode ==='dark' ? "src/assets/images/logo.png" : "src/assets/images/logo.png} alt="MOEU" width="100" />
-        
+      <img
+        src={
+          theme.palette.mode === 'dark'
+            ? 'src/assets/images/logo-dark.png'
+            : 'src/assets/images/logo.png'
+        }
+        alt="MOEU"
+        width="100"
+        {...others}
+      />
     </>
   );
 };
