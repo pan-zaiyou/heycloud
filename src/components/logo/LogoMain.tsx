@@ -23,7 +23,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
      *
      */
     <>
-      <img src={theme.palette.mode ==='dark' ? "https://i.loli.wiki/public/240803/%E4%B8%8A%E4%BC%A01.png" : "shttps://i.loli.wiki/public/240803/%E4%B8%8A%E4%BC%A01.png} alt="MOEU" width="100" />
+      <img src={theme.palette.mode ==='dark' ? "src/assets/images/logo.png" : "src/assets/images/logo.png} alt="MOEU" width="100" />
         
     </>
   );
