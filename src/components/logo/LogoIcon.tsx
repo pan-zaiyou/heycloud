@@ -1,13 +1,5 @@
 import { useTheme } from '@mui/material/styles';
 
-/**
- * 如果你希望使用图片而不是 <svg>，请取消注释以下内容。
- *
- * import logoIconDark from 'assets/images/logo-icon-dark.svg';
- * import logoIcon from 'assets/images/logo-icon.svg';
- *
- */
-
 // ==============================|| LOGO ICON SVG ||============================== //
 
 const LogoIcon = () => {
@@ -22,15 +14,15 @@ const LogoIcon = () => {
      */
     <svg
       fill="#000000"
-      width="129px"
-      height="129px"
-      viewBox="-3.2 -3.2 38.40 38.40"
+      width="93px"
+      height="93px"
+      viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
       <g id="SVGRepo_iconCarrier">
-        <path d="M21.396 6.719l10.604 10.604-3.609 3.615-6.995-6.995-2.458 2.469-3.62-3.615zM14.203 13.917l3.609 3.62 3.396 3.385-3.62 3.609-6.984-6.984-5.568 5.568-1.427 1.417-3.609-3.609 10.604-10.604z"></path>
+        <path d="M14.156 15.297l6.25 4.927-4.141-10.214zM16 0c-8.839 0-16 7.161-16 16s7.161 16 16 16c8.839 0 16-7.161 16-16s-7.161-16-16-16zM23.729 23.073c-0.016 0.63-0.536 1.125-1.167 1.109-0.313 0-0.552-0.12-0.885-0.391l-8.255-6.667-2.771 6.938h-2.396l6.995-16.807c0.167-0.422 0.568-0.693 1.021-0.677 0.432-0.016 0.839 0.25 0.99 0.677l6.365 15.323c0.057 0.151 0.104 0.313 0.104 0.464 0 0.010 0 0.010 0 0.031z"></path>
       </g>
     </svg>
   );
