@@ -78,33 +78,32 @@ const AuthRegister = () => {
   }, []);
 
   const validationSchema = useMemo(
-    () =>
-      Yup.object().shape({
-        email: Yup.string()
-          .email(t("register.email_invalid").toString())
-          .max(255, t("register.email_max", { count: 255 }).toString())
-          .required(t("register.email_required").toString()),
-        password: Yup.string()
-          .min(8, t("register.password_min", { count: 8 }).toString())
-          .max(255, t("register.password_max", { count: 255 }).toString())
-          .required(t("register.password_required").toString()),
-        password_confirm: Yup.string()
-          .oneOf([Yup.ref("password"), null], t("register.password_confirm_invalid").toString())
-          .required(t("register.password_confirm_required").toString()),
-        invite_code: siteConfig?.is_invite_force
-          ? Yup.string()
-              .max(8, t("register.invite_code_max").toString())
-              .required(t("register.invite_code_required").toString())
-          : Yup.string().max(8, t("register.invite_code_max").toString()),
-        email_code: siteConfig?.is_email_verify
-          ? Yup.number()
-              // .max(6, t("register.email_code_max").toString())
-              .required(t("register.email_code_required").toString())
-          : Yup.number().negative()
-      }),
-    [t, siteConfig?.is_invite_force, siteConfig?.is_email_verify]
-  );
-
+  () =>
+    Yup.object().shape({
+      email: Yup.string()
+        .email(t("register.email_invalid").toString())
+        .max(255, t("register.email_max", { count: 255 }).toString())
+        .required(t("register.email_required").toString()),
+      password: Yup.string()
+        .min(8, t("register.password_min", { count: 8 }).toString())
+        .max(255, t("register.password_max", { count: 255 }).toString())
+        .required(t("register.password_required").toString()),
+      password_confirm: Yup.string()
+        .oneOf([Yup.ref("password"), null], t("register.password_confirm_invalid").toString())
+        .required(t("register.password_confirm_required").toString()),
+      invite_code: siteConfig?.is_invite_force
+        ? Yup.string()
+            .max(8, t("register.invite_code_max").toString())
+            .required(t("register.invite_code_required").toString())
+        : Yup.string().max(8, t("register.invite_code_max").toString()),
+      email_code: siteConfig?.is_email_verify
+        ? Yup.string()
+            .matches(/^\d{6}$/, t("register.email_code_invalid").toString())
+            .required(t("register.email_code_required").toString())
+        : Yup.string().notRequired() // or Yup.string().optional() depending on your needs
+    }),
+  [t, siteConfig?.is_invite_force, siteConfig?.is_email_verify]
+);
   return (
     <>
       <Formik
@@ -151,9 +150,7 @@ const AuthRegister = () => {
                 },
                 (error) => {
                   setStatus({ success: false });
-                  // Ensure errors are properly set for fields as well as the global error
                   setErrors(lo.isEmpty(error.errors) ? { submit: error.message } : error.errors);
-                  enqueueSnackbar(error.message, { variant: "error" }); // Show API error message at the top
                   ReactGA.event("register", {
                     category: "auth",
                     label: "register",
@@ -170,7 +167,6 @@ const AuthRegister = () => {
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors(lo.isEmpty(err.errors) ? { submit: err.message } : err.errors);
-              enqueueSnackbar(t("notice::register_failed"), { variant: "error" }); // Show a general error message at the top
             }
           } finally {
             setSubmitting(false);
@@ -380,9 +376,7 @@ const AuthRegister = () => {
                     alignItems: "flex-start"
                   }}
                   label={
-                    <Typography variant={"body2"} sx={{
-                      lineHeight: 2.9,
-                    }}>
+                    <Typography variant={"body2"}>
                       <Trans i18nKey={"register.license_agree"}>
                         <Link
                           id={"terms-of-service"}
@@ -396,11 +390,11 @@ const AuthRegister = () => {
                   }
                 />
               </Grid>
-              {/* {errors.submit && (
+              {errors.submit && (
                 <Grid item xs={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>
                 </Grid>
-              )} */}
+              )}
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button
