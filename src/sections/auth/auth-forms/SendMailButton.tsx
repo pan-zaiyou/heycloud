@@ -52,7 +52,7 @@ export const SendMailWithCaptchaButton: React.FC<SendMailButtonProps> = ({ email
           <ReCaptcha
             sitekey={guestConfig?.recaptcha_site_key!}
             onChange={(token: string | null) => {
-              if (lo.isNull(token)) {
+              if (!lo.isNull(token)) {
                 enqueueSnackbar(t("auth.captcha.error_null_token"), { variant: "error" });
                 return;
               }
