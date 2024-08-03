@@ -154,7 +154,7 @@ const AuthForgotPassword = () => {
               }
             })
             .finally(() => {
-              if (scriptedRef.current) {
+              if (!scriptedRef.current) {
                 setSubmitting(false);
               }
             });
