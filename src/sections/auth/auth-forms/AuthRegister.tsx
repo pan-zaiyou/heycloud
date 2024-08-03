@@ -78,32 +78,33 @@ const AuthRegister = () => {
   }, []);
 
   const validationSchema = useMemo(
-  () =>
-    Yup.object().shape({
-      email: Yup.string()
-        .email(t("register.email_invalid").toString())
-        .max(255, t("register.email_max", { count: 255 }).toString())
-        .required(t("register.email_required").toString()),
-      password: Yup.string()
-        .min(8, t("register.password_min", { count: 8 }).toString())
-        .max(255, t("register.password_max", { count: 255 }).toString())
-        .required(t("register.password_required").toString()),
-      password_confirm: Yup.string()
-        .oneOf([Yup.ref("password"), null], t("register.password_confirm_invalid").toString())
-        .required(t("register.password_confirm_required").toString()),
-      invite_code: siteConfig?.is_invite_force
-        ? Yup.string()
-            .max(8, t("register.invite_code_max").toString())
+    () =>
+      Yup.object().shape({
+        email: Yup.string()
+          .email(t("register.email_invalid").toString())
+          .max(255, t("register.email_max", { count: 255 }).toString())
+          .required(t("register.email_required").toString()),
+        password: Yup.string()
+          .min(8, t("register.password_min", { count: 8 }).toString())
+          .max(255, t("register.password_max", { count: 255 }).toString())
+          .required(t("register.password_required").toString()),
+        password_confirm: Yup.string()
+          .oneOf([Yup.ref("password"), null], t("register.password_confirm_invalid").toString())
+          .required(t("register.password_confirm_required").toString()),
+        invite_code: siteConfig?.is_invite_force
+          ? Yup.string()
+            // .max(8, t("register.invite_code_max").toString())
             .required(t("register.invite_code_required").toString())
-        : Yup.string().max(8, t("register.invite_code_max").toString()),
-      email_code: siteConfig?.is_email_verify
-        ? Yup.string()
-            .matches(/^\d{6}$/, t("register.email_code_invalid").toString())
+          : Yup.string().max(8, t("register.invite_code_max").toString()),
+        email_code: siteConfig?.is_email_verify
+          ? Yup.number()
+            // .max(6, t("register.email_code_max").toString())
             .required(t("register.email_code_required").toString())
-        : Yup.string().notRequired() // or Yup.string().optional() depending on your needs
-    }),
-  [t, siteConfig?.is_invite_force, siteConfig?.is_email_verify]
-);
+          : Yup.number().negative()
+      }),
+    [t, siteConfig?.is_invite_force, siteConfig?.is_email_verify]
+  );
+
   return (
     <>
       <Formik
@@ -118,6 +119,59 @@ const AuthRegister = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          // if (!values.agree) {
+          //   setStatus({ success: false });
+          //   setErrors({ submit: t("register.agree_required").toString() });
+          //   setSubmitting(false);
+          //   return;
+          // }
+
+          // try {
+          //   await register({
+          //     email: values.email,
+          //     password: values.password,
+          //     invite_code: values.invite_code,
+          //     email_code: siteConfig?.is_email_verify ? values.email_code : ""
+          //   } as RegisterPayload)
+          //     .unwrap()
+          //     .then(
+          //       () => {
+          //         setStatus({ success: true });
+          //         enqueueSnackbar(t("notice::register_success"), { variant: "success" });
+          //         navigate("/dashboard", { replace: true });
+          //         ReactGA.event("register", {
+          //           category: "auth",
+          //           label: "register",
+          //           method: "email",
+          //           success: true,
+          //           email: values.email,
+          //           password_strength: level?.label,
+          //           invite_code: values.invite_code
+          //         });
+          //       },
+          //       (error) => {
+          //         setStatus({ success: false });
+          //         setErrors(lo.isEmpty(error.errors) ? { submit: error.message } : error.errors);
+          //         ReactGA.event("register", {
+          //           category: "auth",
+          //           label: "register",
+          //           method: "email",
+          //           success: false,
+          //           error: error.message,
+          //           email: values.email,
+          //           values
+          //         });
+          //       }
+          //     );
+          // } catch (err: any) {
+          //   console.error(err);
+          //   if (scriptedRef.current) {
+          //     setStatus({ success: false });
+          //     setErrors(lo.isEmpty(err.errors) ? { submit: err.message } : err.errors);
+          //   }
+          // } finally {
+          //   setSubmitting(false);
+          // }
           if (!values.agree) {
             setStatus({ success: false });
             setErrors({ submit: t("register.agree_required").toString() });
@@ -150,7 +204,9 @@ const AuthRegister = () => {
                 },
                 (error) => {
                   setStatus({ success: false });
+                  // Ensure errors are properly set for fields as well as the global error
                   setErrors(lo.isEmpty(error.errors) ? { submit: error.message } : error.errors);
+                  enqueueSnackbar(error.message, { variant: "error" }); // Show API error message at the top
                   ReactGA.event("register", {
                     category: "auth",
                     label: "register",
@@ -167,6 +223,7 @@ const AuthRegister = () => {
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors(lo.isEmpty(err.errors) ? { submit: err.message } : err.errors);
+              enqueueSnackbar(t("notice::register_failed"), { variant: "error" }); // Show a general error message at the top
             }
           } finally {
             setSubmitting(false);
@@ -226,9 +283,8 @@ const AuthRegister = () => {
                           width: "100%",
                           margin: "8px",
                           padding: "10px",
-                          border: `1px solid ${
-                            theme.palette.mode === "dark" ? theme.palette.grey[200] : theme.palette.grey[300]
-                          }`,
+                          border: `1px solid ${theme.palette.mode === "dark" ? theme.palette.grey[200] : theme.palette.grey[300]
+                            }`,
                           borderRadius: 4,
                           ":hover": {
                             borderColor: theme.palette.primary.main
@@ -376,25 +432,27 @@ const AuthRegister = () => {
                     alignItems: "flex-start"
                   }}
                   label={
-                    <Typography variant={"body2"}>
+                    <Typography variant={"body2"} sx={{
+                      lineHeight: 2.9,
+                    }}>
                       <Trans i18nKey={"register.license_agree"}>
                         <Link
                           id={"terms-of-service"}
                           variant="subtitle2"
                           component={RouterLink}
-                          to="/terms-of-service"
+                          to="https://moeu.top"
                         />
-                        <Link id={"privacy-policy"} variant="subtitle2" component={RouterLink} to="/privacy-policy" />
+                        <Link id={"privacy-policy"} variant="subtitle2" component={RouterLink} to="https://moeu.top" />
                       </Trans>
                     </Typography>
                   }
                 />
               </Grid>
-              {errors.submit && (
+              {/* {errors.submit && (
                 <Grid item xs={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>
                 </Grid>
-              )}
+              )} */}
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button

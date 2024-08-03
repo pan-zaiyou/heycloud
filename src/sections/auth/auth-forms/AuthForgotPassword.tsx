@@ -92,72 +92,115 @@ const AuthForgotPassword = () => {
             .max(6, t("forgot_password.email_code_max", { count: 6 }).toString())
             .required(t("forgot_password.email_code_required").toString())
         })}
+        // onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        //   if (values.email_code.length !== 6) {
+        //     setStatus({ success: false });
+        //     setErrors({ email_code: t("forgot_password.email_code_invalid").toString() });
+        //     return;
+        //   }
+
+        //   await resetPassword({
+        //     email: values.email,
+        //     password: values.password,
+        //     email_code: values.email_code
+        //   })
+        //     .unwrap()
+        //     .then(() => {
+        //       if (!scriptedRef.current) {
+        //         setStatus({ success: true });
+        //         setSubmitting(false);
+        //         enqueueSnackbar(t("notice::forgot_password.reset_success"), {
+        //           variant: "success"
+        //         });
+        //         ReactGA.event("reset_password", {
+        //           category: "auth",
+        //           label: "reset_password",
+        //           email: values.email,
+        //           success: true
+        //         });
+        //         navigate("/login", { replace: true });
+        //       }
+        //     })
+        //     .catch((err: any) => {
+        //       console.error("Error in reset password", err);
+        //       if (scriptedRef.current) {
+        //         setStatus({ success: false });
+        //         setErrors(err.errors || { submit: err.message });
+        //         setSubmitting(false);
+        //         ReactGA.event("reset_password", {
+        //           category: "auth",
+        //           label: "reset_password",
+        //           email: values.email,
+        //           success: false,
+        //           error: err.message
+        //         });
+        //       }
+        //     })
+        //     .finally(() => {
+        //       if (scriptedRef.current) {
+        //         setSubmitting(false);
+        //       }
+        //     });
+        // }}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          setStatus({ success: null });
-          setSubmitting(true);
-
-          // Check if the email and OTP code have correct values
-          if (!values.email) {
-            setErrors({ email: t("forgot_password.email_required").toString() });
-            setSubmitting(false);
-            return;
-          }
-
           if (values.email_code.length !== 6) {
+            setStatus({ success: false });
             setErrors({ email_code: t("forgot_password.email_code_invalid").toString() });
-            setSubmitting(false);
             return;
           }
 
-          // Check password strength before submitting
-          if (strengthIndicator(values.password) < 3) { // Assuming 3 is a minimum strength level
-            setErrors({ password: t("forgot_password.password_weak").toString() });
-            setSubmitting(false);
-            return;
-          }
+          try {
+            // API call to reset the password
+            await resetPassword({
+              email: values.email,
+              password: values.password,
+              email_code: values.email_code
+            }).unwrap();
 
-          await resetPassword({
-            email: values.email,
-            password: values.password,
-            email_code: values.email_code
-          })
-            .unwrap()
-            .then(() => {
-              if (!scriptedRef.current) {
-                setStatus({ success: true });
-                enqueueSnackbar(t("notice::forgot_password.reset_success"), {
-                  variant: "success"
-                });
-                ReactGA.event("reset_password", {
-                  category: "auth",
-                  label: "reset_password",
-                  email: values.email,
-                  success: true
-                });
-                navigate("/login", { replace: true });
-              }
-            })
-            .catch((err: any) => {
-              if (!scriptedRef.current) {
-                setStatus({ success: false });
-                setErrors(err.errors || { submit: err.message });
-                enqueueSnackbar(t("notice::forgot_password.reset_failed"), {
-                  variant: "error"
-                });
-                ReactGA.event("reset_password", {
-                  category: "auth",
-                  label: "reset_password",
-                  email: values.email,
-                  success: false,
-                  error: err.message
-                });
-              }
-            })
-            .finally(() => {
-              if (!scriptedRef.current) {
-                setSubmitting(false);
-              }
-            });
+            if (!scriptedRef.current) {
+              setStatus({ success: true });
+              setSubmitting(false);
+              enqueueSnackbar(t("notice::forgot_password.reset_success"), {
+                variant: "success"
+              });
+
+              // Track the successful reset password event
+              ReactGA.event("reset_password", {
+                category: "auth",
+                label: "reset_password",
+                email: values.email,
+                success: true
+              });
+
+              // Navigate to login page
+              navigate("/login", { replace: true });
+            }
+          } catch (err) {
+            console.error("Error in reset password", err);
+            // Move Snackbar outside of the scriptedRef check
+            enqueueSnackbar(
+              err.message || t("notice::forgot_password.reset_failed"),
+              { variant: "error" }
+            );
+
+            if (scriptedRef.current) {
+              setStatus({ success: false });
+              setErrors(err.errors || { submit: err.message });
+
+              // Track the failed reset password event
+              ReactGA.event("reset_password", {
+                category: "auth",
+                label: "reset_password",
+                email: values.email,
+                success: false,
+                error: err.message
+              });
+            }
+          } finally {
+            // if (scriptedRef.current) {
+              setSubmitting(false);
+            // }
+          }
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setValues }) => (
@@ -214,9 +257,8 @@ const AuthForgotPassword = () => {
                       width: "100%",
                       margin: "8px",
                       padding: "10px",
-                      border: `1px solid ${
-                        theme.palette.mode === "dark" ? theme.palette.grey[200] : theme.palette.grey[300]
-                      }`,
+                      border: `1px solid ${theme.palette.mode === "dark" ? theme.palette.grey[200] : theme.palette.grey[300]
+                        }`,
                       borderRadius: 4,
                       ":hover": {
                         borderColor: theme.palette.primary.main
@@ -308,6 +350,7 @@ const AuthForgotPassword = () => {
                     onBlur={handleBlur}
                     onChange={(e) => {
                       handleChange(e);
+                      handlePasswordChange(e.target.value);
                     }}
                     autoComplete={"new-password"}
                     placeholder="******"
