@@ -10,7 +10,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       : '/src/assets/images/logo.png';
 
   return (
-    <img src={logoSrc} alt="MOEU" width="100" {...others} />
+    <img src={logoSrc} alt="MANTIS" width="100" {...others} />
   );
 };
 
