@@ -23,7 +23,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
      *
      */
     <>
-      <img src={theme.palette.mode ==='dark' ? "logo1链接" : "logo2链接} alt="MOEU" width="100" />
+      <img src={theme.palette.mode ==='dark' ? "src/assets/images/logo.png" : "src/assets/images/logo.png} alt="MOEU" width="100" />
         
     </>
   );
