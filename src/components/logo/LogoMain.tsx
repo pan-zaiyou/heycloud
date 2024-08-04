@@ -20,7 +20,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
      *
      */
     <>
-      <svg fill="none" width="50px" height="50px" viewBox="0 0 118 35" xmlns="http://www.w3.org/2000/svg">
+      <svg fill="#000000" width="89px" height="89px" viewBox="-2.56 -2.56 37.12 37.12" xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier">
