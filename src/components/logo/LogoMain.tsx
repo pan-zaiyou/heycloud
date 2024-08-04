@@ -1,26 +1,22 @@
 import { useTheme } from '@mui/material/styles';
 
-/**
- * if you want to use image instead of <svg> uncomment following.
- *
- * import logoDark from 'assets/images/logo-dark.svg';
- * import logo from 'assets/images/logo.svg';
- *
- */
-
 // ==============================|| LOGO SVG ||============================== //
 
 const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
   const theme = useTheme();
+  
+  // 根据主题模式设置 SVG 的填充颜色
+  const fillColor = theme.palette.mode === 'dark' ? '#FFFFFF' : '#000000';
+
   return (
     /**
-     * if you want to use image instead of svg uncomment following, and comment out <svg> element.
+     * 如果想使用图片代替 SVG，请取消以下代码的注释，并注释掉 <svg> 元素。
      *
      * <img src={theme.palette.mode === 'dark' ? logoDark : logo} alt="XGW" width="100" />
      *
      */
     <>
-      <svg fill="#000000" width="80px" height="53px" viewBox="0 -2 37.12 28.12" xmlns="http://www.w3.org/2000/svg">
+      <svg fill={fillColor} width="80px" height="53px" viewBox="0 -2 37.12 28.12" xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier">
