@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 
 const LogoIcon = () => {
   const theme = useTheme();
+  const fillColor = theme.palette.mode === 'dark' ? '#FFFFFF' : '#000000';
 
   return (
     /**
@@ -13,7 +14,7 @@ const LogoIcon = () => {
      *
      */
     <svg
-      fill="#000000"
+      fill={fillColor}
       width="93px"
       height="93px"
       viewBox="0 -2.56 32 32"
