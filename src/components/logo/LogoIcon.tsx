@@ -9,14 +9,14 @@ const LogoIcon = () => {
     /**
      * 如果你希望使用图片而不是 SVG，请取消注释以下内容，并注释掉 <svg> 元素。
      *
-     * <img src={theme.palette.mode === 'dark' ? logoIconDark : logoIcon} alt="XGW" width="50" />
+     * <img src={theme.palette.mode === 'dark' ? logoIconDark : logoIcon} alt="XGW" width="100" />
      *
      */
     <svg
       fill="#000000"
       width="93px"
       height="93px"
-      viewBox="-2.56 -2.56 20 37.12"
+      viewBox="-2.56 -2.56 28 37.12"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
