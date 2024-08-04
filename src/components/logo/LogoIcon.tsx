@@ -15,8 +15,8 @@ const LogoIcon = () => {
     <svg
       fill="#000000"
       width="93px"
-      height="53px"
-      viewBox="-2.56 -2.56 37.12 37.12"
+      height="93px"
+      viewBox="-2.56 -2.56 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
