@@ -13,9 +13,9 @@ const LogoIcon = () => {
      *
      */
     <svg
-      fill="#0000FF"
-      width="256px"
-      height="256px"
+      fill="#000000"
+      width="93px"
+      height="93px"
       viewBox="-2.56 -2.56 37.12 37.12"
       xmlns="http://www.w3.org/2000/svg"
     >
