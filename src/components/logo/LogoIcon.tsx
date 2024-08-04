@@ -13,7 +13,7 @@ const LogoIcon = () => {
      *
      */
     <svg
-      fill="#000000"
+      fill="#none"
       width="93px"
       height="93px"
       viewBox="-2.56 -2.56 37.12 37.12"
