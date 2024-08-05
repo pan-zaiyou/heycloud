@@ -15,7 +15,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
         xmlnsXlink="http://www.w3.org/1999/xlink"
         width="120px"
         height="120px"
-        viewBox="0 0 375 374.999991"
+        viewBox="0 0 150 150"
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
         fill={fillColor}
