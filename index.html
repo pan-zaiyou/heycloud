@@ -23,5 +23,17 @@
   <script>
     window.global = window;
   </script>
+
+<script>
+$(document).ready(function() {
+    $(".treeview-menu li a").on("click", function() {
+        if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Blackberry|WebOS|Symbian|Windows Phone|Phone)/i))) {
+            $(document.body).removeClass('sidebar-open');
+        }
+    });
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </body>
 </html>
