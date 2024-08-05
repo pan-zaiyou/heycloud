@@ -12,7 +12,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
     <div
       style={{
         position: 'absolute',
-        top: '0px',  // 稍微向下移动
+        top: '-10px',  // 向下移动一点点
         left: '-5px', // 稍微向右移动
         zIndex: 10,
       }}
@@ -20,8 +20,8 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        width="150"  // 调整后的宽度
-        height="150" // 调整后的高度
+        width="130"  // 调整后的宽度
+        height="130" // 调整后的高度
         viewBox="0 0 375 375"  // 适应新的 viewBox
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
