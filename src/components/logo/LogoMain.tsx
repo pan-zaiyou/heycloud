@@ -13,8 +13,8 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        width="80px"
-        height="80px"
+        width="120px"
+        height="120px"
         viewBox="0 0 375 374.999991"
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
