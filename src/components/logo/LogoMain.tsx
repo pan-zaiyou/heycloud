@@ -22,7 +22,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
         width="115"
         zoomAndPan="magnify"
         viewBox="0 -20 375 375"
-        height="115"
+        height="80"
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
         {...others}
