@@ -13,7 +13,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       style={{
         position: 'absolute',
         top: '0px',  // 稍微向下移动
-        left: '-10px', // 继续向左移动
+        left: '-5px', // 稍微向右移动
         zIndex: 10,
       }}
     >
