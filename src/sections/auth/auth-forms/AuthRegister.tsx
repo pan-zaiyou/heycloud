@@ -100,7 +100,7 @@ const AuthRegister = () => {
           ? Yup.string()
               .matches(/^\d{6}$/, t("register.email_code_invalid").toString())
               .required(t("register.email_code_required").toString())
-          : Yup.string().notRequired() // or Yup.string().optional() depending on your needs
+          : Yup.string().notRequired()
       }),
     [t, siteConfig?.is_invite_force, siteConfig?.is_email_verify]
   );
@@ -152,6 +152,7 @@ const AuthRegister = () => {
                 (error) => {
                   setStatus({ success: false });
                   setErrors(lo.isEmpty(error.errors) ? { submit: error.message } : error.errors);
+                  enqueueSnackbar(error.message, { variant: "error" }); // 添加此行
                   ReactGA.event("register", {
                     category: "auth",
                     label: "register",
@@ -168,6 +169,7 @@ const AuthRegister = () => {
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors(lo.isEmpty(err.errors) ? { submit: err.message } : err.errors);
+              enqueueSnackbar(err.message, { variant: "error" }); // 添加此行
             }
           } finally {
             setSubmitting(false);
@@ -276,14 +278,13 @@ const AuthRegister = () => {
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
-                          color="inherit"
+                          size="large"
                         >
                           {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="******"
-                    inputProps={{}}
+                    placeholder={t("register.password_placeholder").toString()}
                   />
                   {touched.password && errors.password && (
                     <FormHelperText error id="helper-text-password-signup">
@@ -291,108 +292,106 @@ const AuthRegister = () => {
                     </FormHelperText>
                   )}
                 </Stack>
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item>
-                      <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: "7px" }} />
+                {values.password && (
+                  <FormControl fullWidth sx={{ mt: 2 }}>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item>
+                        <Box
+                          sx={{
+                            bgcolor: level?.color,
+                            width: 85,
+                            height: 8,
+                            borderRadius: "7px"
+                          }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="subtitle1" fontSize="0.75rem">
+                          {level?.label}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item>
-                      <Typography variant="subtitle1" fontSize="0.75rem">
-                        {t("register.password_strength", {
-                          context: lo.lowerCase(level?.label)
-                        }).toString()}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </FormControl>
+                  </FormControl>
+                )}
               </Grid>
-              {/* Password Confirm */}
+              {/* Confirm Password */}
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-confirm">
+                  <InputLabel htmlFor="password_confirm-signup">
                     <Trans>{"register.password_confirm"}</Trans>
                   </InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password_confirm && errors.password_confirm)}
-                    id="password-confirm"
+                    id="password_confirm-signup"
                     type={showPassword ? "text" : "password"}
                     value={values.password_confirm}
                     name="password_confirm"
                     onBlur={handleBlur}
-                    onChange={(e) => {
-                      handleChange(e);
-                      handlePasswordChange(e.target.value);
-                    }}
-                    autoComplete={"new-password"}
-                    placeholder="******"
+                    onChange={handleChange}
+                    placeholder={t("register.password_confirm_placeholder").toString()}
                     inputProps={{}}
                   />
                   {touched.password_confirm && errors.password_confirm && (
-                    <FormHelperText error id="helper-text-password-confirm">
+                    <FormHelperText error id="helper-text-password_confirm-signup">
                       {errors.password_confirm}
                     </FormHelperText>
                   )}
                 </Stack>
               </Grid>
               {/* Invite Code */}
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="invite-code-signup" required={siteConfig?.is_invite_force === 1}>
-                    <Trans>{"register.invite_code"}</Trans>
-                  </InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.invite_code && errors.invite_code)}
-                    id="invite-code-signup"
-                    type="text"
-                    value={values.invite_code}
-                    name="invite_code"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required={siteConfig?.is_invite_force === 1}
-                    placeholder={t("register.invite_code_placeholder", {
-                      context: siteConfig?.is_invite_force === 1 ? "required" : "optional"
-                    }).toString()}
-                    inputProps={{}}
-                    disabled={query.get("code") !== null}
-                  />
-                  {touched.invite_code && errors.invite_code && (
-                    <FormHelperText error id="helper-text-email-signup">
-                      {errors.invite_code}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
+              {siteConfig?.is_invite_force === 1 && (
+                <Grid item xs={12}>
+                  <Stack spacing={1}>
+                    <InputLabel htmlFor="invite_code-signup">
+                      <Trans>{"register.invite_code"}</Trans>
+                    </InputLabel>
+                    <OutlinedInput
+                      fullWidth
+                      error={Boolean(touched.invite_code && errors.invite_code)}
+                      id="invite_code-signup"
+                      type="text"
+                      value={values.invite_code}
+                      name="invite_code"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      placeholder={t("register.invite_code_placeholder").toString()}
+                      inputProps={{}}
+                    />
+                    {touched.invite_code && errors.invite_code && (
+                      <FormHelperText error id="helper-text-invite_code-signup">
+                        {errors.invite_code}
+                      </FormHelperText>
+                    )}
+                  </Stack>
+                </Grid>
+              )}
+              {/* Agree Terms */}
               <Grid item xs={12}>
                 <FormControlLabel
-                  value={false}
-                  control={<Checkbox />}
-                  name={"agree"}
-                  id={"agree"}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  aria-required={true}
-                  sx={{
-                    alignItems: "flex-start",
-                    "& .MuiCheckbox-root": {
-                      marginTop: "-7px" // 调整这个值来上移复选框
-                    }
-                  }}
+                  control={
+                    <Checkbox
+                      checked={values.agree}
+                      onChange={handleChange}
+                      name="agree"
+                      color="primary"
+                      size="small"
+                    />
+                  }
                   label={
-                    <Typography variant={"body2"}>
-                      <Trans i18nKey={"register.license_agree"}>
-                        <Link
-                          id={"terms-of-service"}
-                          variant="subtitle2"
-                          component={RouterLink}
-                          to="/terms-of-service"
-                        />
-                        <Link id={"privacy-policy"} variant="subtitle2" component={RouterLink} to="/privacy-policy" />
+                    <Typography variant="h6">
+                      <Trans i18nKey="register.agree_text">
+                        {"I agree to the "}
+                        <Link variant="h6" component={RouterLink} to="/terms" target="_blank">
+                          Terms and Conditions
+                        </Link>
                       </Trans>
                     </Typography>
                   }
                 />
+                {touched.agree && errors.agree && (
+                  <FormHelperText error>{errors.agree}</FormHelperText>
+                )}
               </Grid>
               {errors.submit && (
                 <Grid item xs={12}>
@@ -410,9 +409,16 @@ const AuthRegister = () => {
                     variant="contained"
                     color="primary"
                   >
-                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : <Trans>{"register.submit"}</Trans>}
+                    {isSubmitting ? <CircularProgress size="1.5rem" /> : t("register.submit")}
                   </Button>
                 </AnimateButton>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid item container direction="column" alignItems="center" xs={12}>
+                  <Typography component={Link} to="/login" variant="subtitle1" sx={{ textDecoration: "none" }}>
+                    <Trans>{"register.have_account"}</Trans>
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
           </Box>
