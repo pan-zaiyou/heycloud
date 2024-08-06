@@ -22,7 +22,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
         xmlnsXlink="http://www.w3.org/1999/xlink"
         width="125"  // 调整后的宽度
         height="125" // 调整后的高度
-        viewBox="0 0 375 375"  // 适应新的 viewBox
+        viewBox="0 0 352 200"  // 适应新的 viewBox
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
         {...others}
