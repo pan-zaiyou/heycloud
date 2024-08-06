@@ -276,7 +276,7 @@ const AuthRegister = () => {
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
-                          color="secondary"
+                          color="inherit"
                         >
                           {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                         </IconButton>
@@ -375,7 +375,9 @@ const AuthRegister = () => {
                   aria-required={true}
                   sx={{
                     alignItems: "flex-start",
-                    marginTop: "-2px" // 调整这个值来上移复选框
+                    "& .MuiCheckbox-root": {
+                      marginTop: "-5px" // 调整这个值来上移复选框
+                    }
                   }}
                   label={
                     <Typography variant={"body2"}>
