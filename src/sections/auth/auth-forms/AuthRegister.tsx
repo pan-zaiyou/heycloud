@@ -376,7 +376,7 @@ const AuthRegister = () => {
                   sx={{
                     alignItems: "flex-start",
                     "& .MuiCheckbox-root": {
-                      marginTop: "-6.5px" // 调整这个值来上移复选框
+                      marginTop: "-7px" // 调整这个值来上移复选框
                     }
                   }}
                   label={
