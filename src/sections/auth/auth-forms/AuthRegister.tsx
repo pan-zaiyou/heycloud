@@ -375,7 +375,7 @@ const AuthRegister = () => {
                   aria-required={true}
                   sx={{
                     alignItems: "flex-start",
-                    marginTop: "4px" // Adjust this value as needed
+                    marginTop: "-2px" // 调整这个值来上移复选框
                   }}
                   label={
                     <Typography variant={"body2"}>
