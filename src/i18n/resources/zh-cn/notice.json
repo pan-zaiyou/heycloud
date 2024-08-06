@@ -14,7 +14,6 @@
   "login_fail": "登录失败",
   "register_success": "注册成功",
   "register_failed": "注册失败",
-  "user_exists": "该用户已存在，请尝试使用其他邮箱或登录。",
   "copy_success": "复制成功",
   "copy_fail": "复制失败",
   "knowledge_post": {
