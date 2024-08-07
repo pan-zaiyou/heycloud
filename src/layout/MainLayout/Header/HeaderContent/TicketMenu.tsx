@@ -1,4 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
+
+// material-ui
 import { useTheme } from "@mui/material/styles";
 import {
   Avatar,
@@ -6,9 +8,12 @@ import {
   Box,
   CircularProgress,
   ClickAwayListener,
+  Divider,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemButton,
+  ListItemSecondaryAction,
   ListItemText,
   Paper,
   Popper,
@@ -16,12 +21,19 @@ import {
   Typography,
   useMediaQuery
 } from "@mui/material";
+
+// project import
 import MainCard from "@/components/MainCard";
 import IconButton from "@/components/@extended/IconButton";
 import Transitions from "@/components/@extended/Transitions";
 import { makeStyles } from "@/themes/hooks";
+
+// assets
 import {
+  CommentOutlined,
   CustomerServiceOutlined,
+  GiftOutlined,
+  MessageOutlined,
   RedoOutlined
 } from "@ant-design/icons";
 import { useGetTicketsQuery, useGetUserStatQuery } from "@/store/services/api";
@@ -31,7 +43,6 @@ import { useSnackbar } from "notistack";
 import { useCountDown, useSafeState, useToggle } from "ahooks";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import TicketItem from "./TicketItem"; // Import the updated TicketItem component
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
   root: { flexShrink: 0 },
@@ -108,6 +119,141 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     margin: theme.spacing(2, 4)
   }
 }));
+
+// ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
+
+export interface TickerItemProps {
+  ticket: Omit<Ticket, "message">;
+}
+
+const TicketItem: React.FC<TickerItemProps> = ({ ticket }) => {
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { classes, cx, css } = useStyles({
+    open: true
+  });
+
+  const Icon = useMemo(() => {
+    switch (ticket.reply_status) {
+      case 1:
+        return MessageOutlined;
+      case 0:
+      default:
+        return CommentOutlined;
+    }
+  }, [ticket.reply_status]);
+
+  const colorClass = useMemo(() => {
+    switch (ticket.level) {
+      case 0:
+      default:
+        return css({
+          color: theme.palette.success.main,
+          backgroundColor: theme.palette.success.lighter
+        });
+      case 1:
+        return css({
+          color: theme.palette.warning.main,
+          backgroundColor: theme.palette.warning.lighter
+        });
+      case 2:
+        return css({
+          color: theme.palette.error.main,
+          backgroundColor: theme.palette.error.lighter
+        });
+    }
+  }, [ticket.level, theme.palette, css]);
+
+  const diffUnit = useMemo(() => {
+    const second = dayjs().diff(dayjs.unix(ticket.updated_at), "seconds");
+
+    if (second < 60) {
+      return "seconds";
+    } else if (second < 3600) {
+      return "minutes";
+    } else if (second < 86400) {
+      return "hours";
+    } else {
+      return "days";
+    }
+  }, [ticket.updated_at, Date.now(), t]);
+
+  const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    navigate(`/ticket/${ticket.id}`);
+  };
+
+  return (
+    <ListItem disablePadding divider>
+      <ListItemButton className={classes.itemButton} href={`/ticket/${ticket.id}`} onClick={handleClick}>
+        <ListItemAvatar className={classes.listItemAvatar}>
+          <Avatar className={cx(colorClass, classes.iconAvatar)}>
+            <Icon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          className={classes.listItemText}
+          primary={
+            <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
+              {ticket.subject}
+            </Typography>
+          }
+          secondary={
+            <Trans
+              i18nKey={"layout.header.ticket.updated_at"}
+              context={diffUnit}
+              count={dayjs().diff(dayjs.unix(ticket.updated_at), diffUnit)}
+            >
+              {"Updated At {{count}}"}
+            </Trans>
+          }
+        />
+        <ListItemSecondaryAction className={classes.listItemSecondary}>
+          <Typography variant="caption" noWrap>
+            <Trans
+              i18nKey={"layout.header.ticket.reply_status"}
+              context={ticket.reply_status === 0 ? "replied" : "noreply"}
+            >
+              {ticket.reply_status}
+            </Trans>
+          </Typography>
+        </ListItemSecondaryAction>
+      </ListItemButton>
+    </ListItem>
+  );
+};
+
+const RefreshButton: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
+  const { classes } = useStyles({
+    open: true
+  });
+  const { refetch: refetchTickets } = useGetTicketsQuery();
+
+  const [targetTime, setTargetTime] = useState(dayjs());
+  const [countdown, { seconds }] = useCountDown({
+    targetDate: targetTime
+  });
+
+  const handleRefresh = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    enqueueSnackbar(t("notice::refresh_success"), {
+      variant: "success"
+    });
+    refetchTickets();
+    setTargetTime(dayjs().add(10, "seconds"));
+  };
+
+  return (
+    <Tooltip placement={"right"} title={t("layout.header.ticket.refresh_tooltip")}>
+      <IconButton size="small" className={classes.refreshButton} onClick={handleRefresh} disabled={countdown > 0}>
+        {countdown <= 0 ? <RedoOutlined /> : seconds}
+      </IconButton>
+    </Tooltip>
+  );
+};
 
 const TicketMenu = () => {
   const theme = useTheme();
@@ -191,11 +337,7 @@ const TicketMenu = () => {
                 >
                   <List component="nav" className={classes.nav}>
                     {tickets.map((ticket, index) => (
-                      <TicketItem
-                        key={index}
-                        ticket={ticket}
-                        onClick={() => setOpen(false)} // Close menu when any ticket item is clicked
-                      />
+                      <TicketItem key={index} ticket={ticket} />
                     ))}
                     {isLoading && (
                       <Box className={classes.progress}>
@@ -216,7 +358,6 @@ const TicketMenu = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           navigate("/ticket");
-                          setOpen(false); // Close the menu on "View All" click
                         }}
                       >
                         <ListItemText
