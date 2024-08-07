@@ -78,6 +78,7 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     marginRight: theme.spacing(1)
   }
 }));
+
 const DarkModeSwitchButton: React.FC = () => {
   const theme = useTheme();
   const themeMode = useSelector((state) => state.view.theme.mode);
@@ -86,8 +87,14 @@ const DarkModeSwitchButton: React.FC = () => {
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClick = (mode: string) => () => {
+    dispatch(setThemeMode(mode));
+    handleClose(); // Close the menu after selection
   };
 
   const { classes } = useStyles({ open });
@@ -98,9 +105,9 @@ const DarkModeSwitchButton: React.FC = () => {
         color="secondary"
         className={classes.iconButton}
         variant="light"
-        aria-label="open profile"
+        aria-label="open theme menu"
         ref={anchorRef}
-        aria-controls={open ? "profile-grow" : undefined}
+        aria-controls={open ? "theme-menu" : undefined}
         aria-haspopup="true"
         onClick={toggleOpen}
       >
@@ -113,16 +120,14 @@ const DarkModeSwitchButton: React.FC = () => {
         role={"menu"}
         transition
         disablePortal
-        popperOptions={{
-          modifiers: [
-            {
-              name: "offset",
-              options: {
-                offset: [matchesXs ? -5 : 0, 9]
-              }
+        modifiers={[
+          {
+            name: "offset",
+            options: {
+              offset: [matchesXs ? -5 : 0, 9]
             }
-          ]
-        }}
+          }
+        ]}
       >
         {({ TransitionProps }) => (
           <Transitions type="fade" in={open} {...TransitionProps}>
@@ -137,7 +142,7 @@ const DarkModeSwitchButton: React.FC = () => {
                   <List component="nav" className={classes.nav}>
                     <ListItem disablePadding divider>
                       <ListItemButton
-                        onClick={() => dispatch(setThemeMode("system"))}
+                        onClick={handleClick("system")}
                         selected={themeMode === "system"}
                       >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -149,7 +154,10 @@ const DarkModeSwitchButton: React.FC = () => {
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding divider>
-                      <ListItemButton onClick={() => dispatch(setThemeMode("time"))} selected={themeMode === "time"}>
+                      <ListItemButton
+                        onClick={handleClick("time")}
+                        selected={themeMode === "time"}
+                      >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
                           <AccessTimeOutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
@@ -159,7 +167,10 @@ const DarkModeSwitchButton: React.FC = () => {
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding divider>
-                      <ListItemButton onClick={() => dispatch(setThemeMode("light"))} selected={themeMode === "light"}>
+                      <ListItemButton
+                        onClick={handleClick("light")}
+                        selected={themeMode === "light"}
+                      >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
                           <Brightness5OutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
@@ -169,7 +180,10 @@ const DarkModeSwitchButton: React.FC = () => {
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding divider>
-                      <ListItemButton onClick={() => dispatch(setThemeMode("dark"))} selected={themeMode === "dark"}>
+                      <ListItemButton
+                        onClick={handleClick("dark")}
+                        selected={themeMode === "dark"}
+                      >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
                           <Brightness4OutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
