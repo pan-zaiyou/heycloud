@@ -81,12 +81,13 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
 
 const DarkModeSwitchButton: React.FC = () => {
   const theme = useTheme();
-  const themeMode = useSelector((state) => state.view.theme.mode);
+  const themeMode = useSelector((state: any) => state.view.theme.mode); // Adjust the type if using TypeScript
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
   const dispatch = useDispatch();
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
+
   const handleClose = () => {
     setOpen(false);
   };
