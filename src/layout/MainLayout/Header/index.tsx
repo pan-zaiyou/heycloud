@@ -1,8 +1,8 @@
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 
 // material-ui
 import { useTheme } from "@mui/material/styles";
-import { AppBar, Toolbar, useMediaQuery, AppBarProps } from "@mui/material";
+import { AppBar, Toolbar, useMediaQuery } from "@mui/material";
 
 // project import
 import AppBarStyled from "./AppBarStyled";
@@ -19,17 +19,14 @@ interface Props {
   handleDrawerToggle?: () => void;
 }
 
-const Header = ({ open, handleDrawerToggle }: Props) => {
+const Header: React.FC<Props> = ({ open, handleDrawerToggle }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down("lg"));
-
-  // header content
-  const headerContent = useMemo(() => <HeaderContent />, []);
 
   const iconBackColorOpen = theme.palette.mode === "dark" ? "grey.200" : "grey.300";
   const iconBackColor = theme.palette.mode === "dark" ? "background.default" : "grey.100";
 
-  // common header
+  // Common header
   const mainHeader: ReactNode = (
     <Toolbar>
       <IconButton
@@ -38,34 +35,28 @@ const Header = ({ open, handleDrawerToggle }: Props) => {
         edge="start"
         color="secondary"
         variant="light"
-        sx={{ color: "text.primary", bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
+        sx={{ 
+          color: "text.primary", 
+          bgcolor: open ? iconBackColorOpen : iconBackColor, 
+          ml: { xs: 0, lg: -2 } 
+        }}
       >
         {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton>
-      {headerContent}
+      <HeaderContent />
     </Toolbar>
   );
-
-  // app-bar params
-  const appBar: AppBarProps = {
-    position: "fixed",
-    color: "inherit",
-    elevation: 0,
-    sx: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      zIndex: 1200
-      // boxShadow: theme.customShadows.z1
-    }
-  };
 
   return (
     <>
       {!matchDownMD ? (
-        <AppBarStyled open={open} {...appBar}>
+        <AppBarStyled open={open} position="fixed" color="inherit" elevation={0} sx={{ borderBottom: `1px solid ${theme.palette.divider}`, zIndex: 1200 }}>
           {mainHeader}
         </AppBarStyled>
       ) : (
-        <AppBar {...appBar}>{mainHeader}</AppBar>
+        <AppBar position="fixed" color="inherit" elevation={0} sx={{ borderBottom: `1px solid ${theme.palette.divider}`, zIndex: 1200 }}>
+          {mainHeader}
+        </AppBar>
       )}
     </>
   );
