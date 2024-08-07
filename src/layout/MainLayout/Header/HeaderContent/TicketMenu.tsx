@@ -8,7 +8,6 @@ import {
   Box,
   CircularProgress,
   ClickAwayListener,
-  Divider,
   List,
   ListItem,
   ListItemAvatar,
@@ -32,7 +31,6 @@ import { makeStyles } from "@/themes/hooks";
 import {
   CommentOutlined,
   CustomerServiceOutlined,
-  GiftOutlined,
   MessageOutlined,
   RedoOutlined
 } from "@ant-design/icons";
@@ -358,6 +356,7 @@ const TicketMenu = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           navigate("/ticket");
+                          setOpen(false); // Close the menu on "View All" click
                         }}
                       >
                         <ListItemText
