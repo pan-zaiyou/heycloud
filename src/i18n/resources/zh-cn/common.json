@@ -26,7 +26,6 @@
       "dark-mode-switch": {
         "title": "切换色彩模式",
         "follow-system": "跟随系统",
-        "follow-times": "跟随时间",
         "always-light": "始终亮色",
         "always-dark": "始终暗色"
       },
