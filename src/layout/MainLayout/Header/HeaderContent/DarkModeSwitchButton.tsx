@@ -87,14 +87,13 @@ const DarkModeSwitchButton: React.FC = () => {
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
-
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleClick = (mode: string) => () => {
+  const handleThemeChange = (mode: string) => () => {
     dispatch(setThemeMode(mode));
-    handleClose(); // Close the menu after selection
+    handleClose();
   };
 
   const { classes } = useStyles({ open });
@@ -105,9 +104,9 @@ const DarkModeSwitchButton: React.FC = () => {
         color="secondary"
         className={classes.iconButton}
         variant="light"
-        aria-label="open theme menu"
+        aria-label="open profile"
         ref={anchorRef}
-        aria-controls={open ? "theme-menu" : undefined}
+        aria-controls={open ? "profile-grow" : undefined}
         aria-haspopup="true"
         onClick={toggleOpen}
       >
@@ -120,14 +119,16 @@ const DarkModeSwitchButton: React.FC = () => {
         role={"menu"}
         transition
         disablePortal
-        modifiers={[
-          {
-            name: "offset",
-            options: {
-              offset: [matchesXs ? -5 : 0, 9]
+        popperOptions={{
+          modifiers: [
+            {
+              name: "offset",
+              options: {
+                offset: [matchesXs ? -5 : 0, 9]
+              }
             }
-          }
-        ]}
+          ]
+        }}
       >
         {({ TransitionProps }) => (
           <Transitions type="fade" in={open} {...TransitionProps}>
@@ -142,7 +143,7 @@ const DarkModeSwitchButton: React.FC = () => {
                   <List component="nav" className={classes.nav}>
                     <ListItem disablePadding divider>
                       <ListItemButton
-                        onClick={handleClick("system")}
+                        onClick={handleThemeChange("system")}
                         selected={themeMode === "system"}
                       >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -155,7 +156,7 @@ const DarkModeSwitchButton: React.FC = () => {
                     </ListItem>
                     <ListItem disablePadding divider>
                       <ListItemButton
-                        onClick={handleClick("time")}
+                        onClick={handleThemeChange("time")}
                         selected={themeMode === "time"}
                       >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -168,7 +169,7 @@ const DarkModeSwitchButton: React.FC = () => {
                     </ListItem>
                     <ListItem disablePadding divider>
                       <ListItemButton
-                        onClick={handleClick("light")}
+                        onClick={handleThemeChange("light")}
                         selected={themeMode === "light"}
                       >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -181,7 +182,7 @@ const DarkModeSwitchButton: React.FC = () => {
                     </ListItem>
                     <ListItem disablePadding divider>
                       <ListItemButton
-                        onClick={handleClick("dark")}
+                        onClick={handleThemeChange("dark")}
                         selected={themeMode === "dark"}
                       >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
