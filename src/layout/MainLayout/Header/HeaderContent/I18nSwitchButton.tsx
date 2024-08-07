@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { useToggle } from "ahooks";
 
 // material-ui
@@ -23,13 +23,11 @@ import { makeStyles } from "@/themes/hooks";
 import IconButton from "@/components/@extended/IconButton";
 import Transitions from "@/components/@extended/Transitions";
 import MainCard from "@/components/MainCard";
-import { useDispatch, useSelector } from "@/store";
-import { setThemeMode } from "@/store/reducers/view";
+import config from "@/config";
 
 // assets
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import "flag-icons/css/flag-icons.css";
-import config from "@/config";
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
   root: { flexShrink: 0 },
@@ -77,13 +75,14 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     marginRight: theme.spacing(1)
   }
 }));
+
 const I18nSwitchButton: React.FC = () => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
   const { t, i18n } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleChangeLanguage = (lang: string) => () => {
+  const handleChangeLanguage = useCallback((lang: string) => () => {
     if (i18n.language === lang) {
       return;
     }
@@ -113,10 +112,15 @@ const I18nSwitchButton: React.FC = () => {
           }
         );
       });
-  };
+  }, [i18n, t, enqueueSnackbar]);
+
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
-  const handleClose = () => {
+
+  const handleClose = (event: MouseEvent | TouchEvent) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
     setOpen(false);
   };
 
@@ -128,9 +132,9 @@ const I18nSwitchButton: React.FC = () => {
         color="secondary"
         className={classes.iconButton}
         variant="light"
-        aria-label="open profile"
+        aria-label="open language menu"
         ref={anchorRef}
-        aria-controls={open ? "profile-grow" : undefined}
+        aria-controls={open ? "language-menu" : undefined}
         aria-haspopup="true"
         onClick={toggleOpen}
       >
@@ -147,16 +151,14 @@ const I18nSwitchButton: React.FC = () => {
         role={"menu"}
         transition
         disablePortal
-        popperOptions={{
-          modifiers: [
-            {
-              name: "offset",
-              options: {
-                offset: [matchesXs ? -5 : 0, 9]
-              }
+        modifiers={[
+          {
+            name: "offset",
+            options: {
+              offset: [matchesXs ? -5 : 0, 9]
             }
-          ]
-        }}
+          }
+        ]}
       >
         {({ TransitionProps }) => (
           <Transitions type="fade" in={open} {...TransitionProps}>
@@ -176,7 +178,10 @@ const I18nSwitchButton: React.FC = () => {
                           <ListItemButton
                             aria-label={lang}
                             selected={i18n.language === lang}
-                            onClick={handleChangeLanguage(lang)}
+                            onClick={() => {
+                              handleChangeLanguage(lang)();
+                              setOpen(false); // Close the menu after language change
+                            }}
                           >
                             <Stack direction={"row"} spacing={2} alignItems={"center"}>
                               <Box
