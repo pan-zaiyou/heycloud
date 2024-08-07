@@ -1,6 +1,4 @@
 import React, { useMemo, useRef, useState } from "react";
-
-// material-ui
 import { useTheme } from "@mui/material/styles";
 import {
   Avatar,
@@ -10,9 +8,7 @@ import {
   ClickAwayListener,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemButton,
-  ListItemSecondaryAction,
   ListItemText,
   Paper,
   Popper,
@@ -20,16 +16,11 @@ import {
   Typography,
   useMediaQuery
 } from "@mui/material";
-
-// project import
 import MainCard from "@/components/MainCard";
 import IconButton from "@/components/@extended/IconButton";
 import Transitions from "@/components/@extended/Transitions";
 import { makeStyles } from "@/themes/hooks";
-
-// assets
 import {
-  CommentOutlined,
   CustomerServiceOutlined,
   RedoOutlined
 } from "@ant-design/icons";
@@ -40,6 +31,7 @@ import { useSnackbar } from "notistack";
 import { useCountDown, useSafeState, useToggle } from "ahooks";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import TicketItem from "./TicketItem"; // Import the updated TicketItem component
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
   root: { flexShrink: 0 },
@@ -199,7 +191,11 @@ const TicketMenu = () => {
                 >
                   <List component="nav" className={classes.nav}>
                     {tickets.map((ticket, index) => (
-                      <TicketItem key={index} ticket={ticket} />
+                      <TicketItem
+                        key={index}
+                        ticket={ticket}
+                        onClick={() => setOpen(false)} // Close menu when any ticket item is clicked
+                      />
                     ))}
                     {isLoading && (
                       <Box className={classes.progress}>
