@@ -78,23 +78,16 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     marginRight: theme.spacing(1)
   }
 }));
-
 const DarkModeSwitchButton: React.FC = () => {
   const theme = useTheme();
-  const themeMode = useSelector((state: any) => state.view.theme.mode); // Adjust the type if using TypeScript
+  const themeMode = useSelector((state) => state.view.theme.mode);
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
   const dispatch = useDispatch();
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
-
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleThemeChange = (mode: string) => () => {
-    dispatch(setThemeMode(mode));
-    handleClose();
   };
 
   const { classes } = useStyles({ open });
@@ -144,7 +137,7 @@ const DarkModeSwitchButton: React.FC = () => {
                   <List component="nav" className={classes.nav}>
                     <ListItem disablePadding divider>
                       <ListItemButton
-                        onClick={handleThemeChange("system")}
+                        onClick={() => dispatch(setThemeMode("system"))}
                         selected={themeMode === "system"}
                       >
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -156,10 +149,7 @@ const DarkModeSwitchButton: React.FC = () => {
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding divider>
-                      <ListItemButton
-                        onClick={handleThemeChange("time")}
-                        selected={themeMode === "time"}
-                      >
+                      <ListItemButton onClick={() => dispatch(setThemeMode("time"))} selected={themeMode === "time"}>
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
                           <AccessTimeOutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
@@ -169,10 +159,7 @@ const DarkModeSwitchButton: React.FC = () => {
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding divider>
-                      <ListItemButton
-                        onClick={handleThemeChange("light")}
-                        selected={themeMode === "light"}
-                      >
+                      <ListItemButton onClick={() => dispatch(setThemeMode("light"))} selected={themeMode === "light"}>
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
                           <Brightness5OutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
@@ -182,10 +169,7 @@ const DarkModeSwitchButton: React.FC = () => {
                       </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding divider>
-                      <ListItemButton
-                        onClick={handleThemeChange("dark")}
-                        selected={themeMode === "dark"}
-                      >
+                      <ListItemButton onClick={() => dispatch(setThemeMode("dark"))} selected={themeMode === "dark"}>
                         <Stack direction={"row"} spacing={2} alignItems={"center"}>
                           <Brightness4OutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
