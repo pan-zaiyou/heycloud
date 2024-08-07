@@ -51,6 +51,11 @@ const Footer = () => {
         {data?.telegram_discuss_link && (
           <Link href={data?.telegram_discuss_link} target="_blank" variant="caption" color="textPrimary">
             {t("layout.footer.contact-us")}
+          </Link>
+        )}
+        <Link component={RouterLink} to="/privacy-policy" target="_blank" variant="caption" color="textPrimary">
+          {t("layout.footer.privacy-policy")}
+        </Link>
         <Link component={RouterLink} to="/terms" target="_blank" variant="caption" color="textPrimary">
           {t("layout.footer.terms-of-service")}
         </Link>
