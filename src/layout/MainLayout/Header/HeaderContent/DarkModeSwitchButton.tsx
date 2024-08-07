@@ -30,7 +30,6 @@ import BrightnessMediumOutlinedIcon from "@mui/icons-material/BrightnessMediumOu
 import Brightness5OutlinedIcon from "@mui/icons-material/Brightness5Outlined";
 import Brightness4OutlinedIcon from "@mui/icons-material/Brightness4Outlined";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
   root: { flexShrink: 0 },
@@ -78,6 +77,7 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     marginRight: theme.spacing(1)
   }
 }));
+
 const DarkModeSwitchButton: React.FC = () => {
   const theme = useTheme();
   const themeMode = useSelector((state) => state.view.theme.mode);
@@ -144,16 +144,6 @@ const DarkModeSwitchButton: React.FC = () => {
                           <Brightness6OutlinedIcon className={classes.icon} />
                           <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
                             <Trans i18nKey={"layout.header.dark-mode-switch.follow-system"}>跟随系统</Trans>
-                          </Typography>
-                        </Stack>
-                      </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding divider>
-                      <ListItemButton onClick={() => dispatch(setThemeMode("time"))} selected={themeMode === "time"}>
-                        <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                          <AccessTimeOutlinedIcon className={classes.icon} />
-                          <Typography variant="h6" className={classes.listItemTextTypography} noWrap>
-                            <Trans i18nKey={"layout.header.dark-mode-switch.follow-times"}>跟随时间</Trans>
                           </Typography>
                         </Stack>
                       </ListItemButton>
