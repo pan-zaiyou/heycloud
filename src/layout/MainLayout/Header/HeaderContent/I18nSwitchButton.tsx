@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef } from "react";
 import { useToggle } from "ahooks";
 
 // material-ui
@@ -23,11 +23,13 @@ import { makeStyles } from "@/themes/hooks";
 import IconButton from "@/components/@extended/IconButton";
 import Transitions from "@/components/@extended/Transitions";
 import MainCard from "@/components/MainCard";
-import config from "@/config";
+import { useDispatch, useSelector } from "@/store";
+import { setThemeMode } from "@/store/reducers/view";
 
 // assets
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import "flag-icons/css/flag-icons.css";
+import config from "@/config";
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
   root: { flexShrink: 0 },
@@ -82,7 +84,7 @@ const I18nSwitchButton: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleChangeLanguage = useCallback((lang: string) => () => {
+  const handleChangeLanguage = (lang: string) => () => {
     if (i18n.language === lang) {
       return;
     }
@@ -99,6 +101,7 @@ const I18nSwitchButton: React.FC = () => {
             variant: "success"
           }
         );
+        handleClose(); // Close the Popper after language change
       })
       .catch((err) => {
         console.error("change language error", err);
@@ -112,15 +115,12 @@ const I18nSwitchButton: React.FC = () => {
           }
         );
       });
-  }, [i18n, t, enqueueSnackbar]);
+  };
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
 
-  const handleClose = (event: MouseEvent | TouchEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -151,14 +151,16 @@ const I18nSwitchButton: React.FC = () => {
         role={"menu"}
         transition
         disablePortal
-        modifiers={[
-          {
-            name: "offset",
-            options: {
-              offset: [matchesXs ? -5 : 0, 9]
+        popperOptions={{
+          modifiers: [
+            {
+              name: "offset",
+              options: {
+                offset: [matchesXs ? -5 : 0, 9]
+              }
             }
-          }
-        ]}
+          ]
+        }}
       >
         {({ TransitionProps }) => (
           <Transitions type="fade" in={open} {...TransitionProps}>
@@ -178,10 +180,7 @@ const I18nSwitchButton: React.FC = () => {
                           <ListItemButton
                             aria-label={lang}
                             selected={i18n.language === lang}
-                            onClick={() => {
-                              handleChangeLanguage(lang)();
-                              setOpen(false); // Close the menu after language change
-                            }}
+                            onClick={handleChangeLanguage(lang)}
                           >
                             <Stack direction={"row"} spacing={2} alignItems={"center"}>
                               <Box
