@@ -101,7 +101,6 @@ const I18nSwitchButton: React.FC = () => {
             variant: "success"
           }
         );
-        handleClose(); // Close the Popper after language change
       })
       .catch((err) => {
         console.error("change language error", err);
@@ -115,11 +114,13 @@ const I18nSwitchButton: React.FC = () => {
           }
         );
       });
+
+    // Close the popper after selecting a language
+    setOpen(false);
   };
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, { toggle: toggleOpen, set: setOpen }] = useToggle(false);
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -132,9 +133,9 @@ const I18nSwitchButton: React.FC = () => {
         color="secondary"
         className={classes.iconButton}
         variant="light"
-        aria-label="open language menu"
+        aria-label="open profile"
         ref={anchorRef}
-        aria-controls={open ? "language-menu" : undefined}
+        aria-controls={open ? "profile-grow" : undefined}
         aria-haspopup="true"
         onClick={toggleOpen}
       >
