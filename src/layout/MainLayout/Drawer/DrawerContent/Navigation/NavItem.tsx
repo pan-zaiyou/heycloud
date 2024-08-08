@@ -1,27 +1,20 @@
-import { forwardRef, useEffect, ForwardRefExoticComponent, RefAttributes } from "react";
+import React, { forwardRef, useEffect, ForwardRefExoticComponent, RefAttributes } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-// material-ui
 import { useTheme } from "@mui/material/styles";
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
-
-// project import
 import { activeItem } from "@/store/reducers/menu";
-
-// types
 import { LinkTarget, NavItemType } from "@/types/menu";
 import { RootStateProps } from "@/types/root";
 import { useTranslation } from "react-i18next";
 
-// ==============================|| NAVIGATION - LIST ITEM ||============================== //
-
 interface Props {
   item: NavItemType;
   level: number;
+  onClick?: () => void; // 添加 onClick 属性
 }
 
-const NavItem = ({ item, level }: Props) => {
+const NavItem = ({ item, level, onClick }: Props) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -49,7 +42,6 @@ const NavItem = ({ item, level }: Props) => {
 
   const { pathname } = useLocation();
 
-  // active menu item on page load
   useEffect(() => {
     if (pathname && pathname.includes("product-details")) {
       if (item.url && item.url.includes("product-details")) {
@@ -77,6 +69,7 @@ const NavItem = ({ item, level }: Props) => {
       {...listItemProps}
       disabled={item.disabled}
       selected={isSelected}
+      onClick={onClick} // 添加 onClick
       sx={{
         zIndex: 1201,
         pl: drawerOpen ? `${level * 28}px` : 1.5,
