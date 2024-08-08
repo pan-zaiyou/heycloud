@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, ForwardRefExoticComponent, RefAttributes } from "react";
+import React, { forwardRef, useEffect, ForwardRefExoticComponent, RefAttributes } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,62 +28,50 @@ const NavItem = ({ item, level }: Props) => {
   const menu = useSelector((state: RootStateProps) => state.menu);
   const { drawerOpen, openItem } = menu;
 
-  let itemTarget: LinkTarget = "_self";
-  if (item.target) {
-    itemTarget = "_blank";
-  }
+  // Determine the target attribute for the link
+  const itemTarget: LinkTarget = item.target ? "_blank" : "_self";
 
-  let listItemProps: {
-    component: ForwardRefExoticComponent<RefAttributes<HTMLAnchorElement>> | string;
-    href?: string;
-    target?: LinkTarget;
-  } = { component: forwardRef((props, ref) => <Link {...props} ref={ref} to={item.url!} target={itemTarget} />) };
-  if (item?.external) {
-    listItemProps = { component: "a", href: item.url, target: itemTarget };
-  }
+  // Define link properties
+  const listItemProps = item.external
+    ? { component: "a", href: item.url, target: itemTarget }
+    : { component: forwardRef((props, ref) => <Link {...props} ref={ref} to={item.url!} target={itemTarget} />) };
 
+  // Determine icon properties
   const Icon = item.icon!;
-  const itemIcon = item.icon ? <Icon style={{ fontSize: drawerOpen ? "1rem" : "1.25rem" }} /> : false;
+  const itemIcon = <Icon style={{ fontSize: drawerOpen ? "1rem" : "1.25rem" }} />;
 
-  const isSelected = openItem.findIndex((id) => id === item.id) > -1;
+  // Check if the item is selected
+  const isSelected = openItem.includes(item.id);
 
+  // Get the current pathname
   const { pathname } = useLocation();
 
-  // active menu item on page load
+  // Update active item on page load
   useEffect(() => {
-    if (pathname && pathname.includes("product-details")) {
-      if (item.url && item.url.includes("product-details")) {
-        dispatch(activeItem({ openItem: [item.id] }));
-      }
-    }
-
-    if (pathname && pathname.includes("kanban")) {
-      if (item.url && item.url.includes("kanban")) {
-        dispatch(activeItem({ openItem: [item.id] }));
-      }
-    }
-
-    if (pathname === item.url) {
+    if (pathname.includes(item.url || "")) {
       dispatch(activeItem({ openItem: [item.id] }));
     }
-    // eslint-disable-next-line
-  }, [pathname]);
+  }, [pathname, dispatch, item.id, item.url]);
 
+  // Styles
   const textColor = theme.palette.mode === "dark" ? "grey.400" : "text.primary";
-  const iconSelectedColor = theme.palette.mode === "dark" && drawerOpen ? "text.primary" : "primary.main";
+  const iconSelectedColor = drawerOpen && theme.palette.mode === "dark" ? "text.primary" : "primary.main";
 
   return (
     <ListItemButton
       {...listItemProps}
       disabled={item.disabled}
       selected={isSelected}
+      onClick={() => {
+        dispatch(activeItem({ openItem: [item.id] }));
+      }}
       sx={{
         zIndex: 1201,
         pl: drawerOpen ? `${level * 28}px` : 1.5,
         py: !drawerOpen && level === 1 ? 1.25 : 1,
         ...(drawerOpen && {
           "&:hover": {
-            bgcolor: theme.palette.mode === "dark" ? "divider" : "primary.lighter"
+            bgcolor: theme.palette.mode === "dark" ? "divider" : "primary.lighter",
           },
           "&.Mui-selected": {
             bgcolor: theme.palette.mode === "dark" ? "divider" : "primary.lighter",
@@ -91,21 +79,18 @@ const NavItem = ({ item, level }: Props) => {
             color: iconSelectedColor,
             "&:hover": {
               color: iconSelectedColor,
-              bgcolor: theme.palette.mode === "dark" ? "divider" : "primary.lighter"
-            }
-          }
+              bgcolor: theme.palette.mode === "dark" ? "divider" : "primary.lighter",
+            },
+          },
         }),
         ...(!drawerOpen && {
           "&:hover": {
-            bgcolor: "transparent"
+            bgcolor: "transparent",
           },
           "&.Mui-selected": {
-            "&:hover": {
-              bgcolor: "transparent"
-            },
-            bgcolor: "transparent"
-          }
-        })
+            bgcolor: "transparent",
+          },
+        }),
       }}
     >
       {itemIcon && (
@@ -120,16 +105,12 @@ const NavItem = ({ item, level }: Props) => {
               alignItems: "center",
               justifyContent: "center",
               "&:hover": {
-                bgcolor: theme.palette.mode === "dark" ? "secondary.light" : "secondary.lighter"
-              }
-            }),
-            ...(!drawerOpen &&
-              isSelected && {
+                bgcolor: theme.palette.mode === "dark" ? "secondary.light" : "secondary.lighter",
+              },
+              ...(isSelected && {
                 bgcolor: theme.palette.mode === "dark" ? "primary.900" : "primary.lighter",
-                "&:hover": {
-                  bgcolor: theme.palette.mode === "dark" ? "primary.darker" : "primary.lighter"
-                }
-              })
+              }),
+            }),
           }}
         >
           {itemIcon}
