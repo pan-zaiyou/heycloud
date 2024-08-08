@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { styled, useTheme, Theme } from "@mui/material/styles";
 import MuiAvatar from "@mui/material/Avatar";
 import { AvatarProps } from "@mui/material";
@@ -110,6 +110,14 @@ export interface Props extends AvatarProps {
   rotateAvatars?: boolean;  // 控制是否轮询头像
 }
 
+const avatars = [
+  "images/users/avatar-1.png",
+  "images/users/avatar-2.png",
+  "images/users/avatar-3.png",
+  "images/users/avatar-4.png",
+  "images/users/avatar-5.png",
+];
+
 export default function Avatar({
   variant = "circular",
   color = "primary",
@@ -121,15 +129,6 @@ export default function Avatar({
   const theme = useTheme();
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
 
-  // 头像路径数组
-  const avatars = [
-    "images/users/avatar-1.png",
-    "images/users/avatar-2.png",
-    "images/users/avatar-3.png",
-    "images/users/avatar-4.png",
-    "images/users/avatar-5.png",
-  ];
-
   useEffect(() => {
     if (rotateAvatars) {
       const interval = setInterval(() => {
@@ -140,7 +139,7 @@ export default function Avatar({
     }
   }, [rotateAvatars]);
 
-  return rotateAvatars ? (
+  return (
     <AvatarStyle
       variant={variant}
       theme={theme}
@@ -150,5 +149,5 @@ export default function Avatar({
       src={avatars[currentAvatarIndex]}
       {...others}
     />
-  ) : null;
+  );
 }
