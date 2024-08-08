@@ -123,7 +123,7 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
-  rotateAvatars = false,
+  rotateAvatars = true,
   ...others
 }: Props) {
   const theme = useTheme();
