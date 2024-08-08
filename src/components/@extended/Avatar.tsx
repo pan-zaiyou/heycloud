@@ -130,7 +130,7 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
-  rotateAvatars = false, // 默认值为 false
+  rotateAvatars = true, // 默认值为 false
   ...others
 }: Props) {
   const theme = useTheme();
