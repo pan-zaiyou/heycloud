@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { styled, useTheme, Theme } from "@mui/material/styles";
 import MuiAvatar from "@mui/material/Avatar";
 import { AvatarProps } from "@mui/material";
@@ -107,6 +107,7 @@ export interface Props extends AvatarProps {
   color?: ColorProps;
   type?: AvatarTypeProps;
   size?: SizeProps;
+  rotateAvatars?: boolean;  // 新增属性用于控制是否轮询头像
 }
 
 export default function Avatar({
@@ -114,11 +115,40 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
+  rotateAvatars = false,
   ...others
 }: Props) {
   const theme = useTheme();
+  const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
+
+  // 头像路径数组
+  const avatars = [
+    "images/users/avatar-1.png",
+    "images/users/avatar-2.png",
+    "images/users/avatar-3.png",
+    "images/users/avatar-4.png",
+    "images/users/avatar-5.png",
+  ];
+
+  useEffect(() => {
+    if (rotateAvatars) {
+      const interval = setInterval(() => {
+        setCurrentAvatarIndex((prevIndex) => (prevIndex + 1) % avatars.length);
+      }, 3000); // 每3秒切换一次头像
+
+      return () => clearInterval(interval); // 清除定时器
+    }
+  }, [rotateAvatars]);
 
   return (
-    <AvatarStyle variant={variant} theme={theme} color={color} type={type} size={size} {...others} />
+    <AvatarStyle
+      variant={variant}
+      theme={theme}
+      color={color}
+      type={type}
+      size={size}
+      src={rotateAvatars ? avatars[currentAvatarIndex] : others.src}
+      {...others}
+    />
   );
 }
