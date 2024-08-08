@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+// material-ui
 import { styled } from "@mui/material/styles";
 import AppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { Drawer, List, ListItem, ListItemButton, ListItemText, Box } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+
+// project import
+import { drawerWidth } from "@/config";
+
+// ==============================|| HEADER - APP BAR STYLED ||============================== //
 
 interface Props extends MuiAppBarProps {
   open?: boolean;
 }
-
-const drawerWidth = 240; // Assuming drawerWidth is 240px
 
 const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== "open" })<Props>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
@@ -28,53 +29,5 @@ const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== "ope
     })
   })
 }));
-
-const Sidebar = () => {
-  const [open, setOpen] = useState(true);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleMenuItemClick = (path: string) => {
-    navigate(path);
-    setOpen(false); // Collapse the sidebar when a menu item is clicked
-  };
-
-  return (
-    <Drawer
-      variant="persistent"
-      open={open}
-      onClose={() => setOpen(false)}
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: drawerWidth,
-          boxSizing: "border-box",
-        },
-      }}
-    >
-      <List>
-        <ListItem button onClick={() => handleMenuItemClick("/home")}>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem button onClick={() => handleMenuItemClick("/about")}>
-          <ListItemText primary="About" />
-        </ListItem>
-        {/* Add more menu items here */}
-      </List>
-    </Drawer>
-  );
-};
-
-const AppBarWithSidebar = () => {
-  return (
-    <Box sx={{ display: "flex" }}>
-      <AppBarStyled open={true} position="fixed">
-        {/* AppBar content */}
-      </AppBarStyled>
-      <Sidebar />
-    </Box>
-  );
-};
 
 export default AppBarStyled;
