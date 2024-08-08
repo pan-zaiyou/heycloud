@@ -5,6 +5,13 @@ import { AvatarProps } from "@mui/material";
 import getColors from "@/utils/getColors";
 import { AvatarTypeProps, ColorProps, ExtendedStyleProps, SizeProps } from "@/types/extended";
 
+// 导入头像路径
+import avatar1 from "@/assets/images/users/avatar-1.png";
+import avatar2 from "@/assets/images/users/avatar-2.png";
+import avatar3 from "@/assets/images/users/avatar-3.png";
+import avatar4 from "@/assets/images/users/avatar-4.png";
+import avatar5 from "@/assets/images/users/avatar-5.png";
+
 interface AvatarStyleProps extends ExtendedStyleProps {
   variant?: AvatarProps["variant"];
   type?: AvatarTypeProps;
@@ -104,11 +111,11 @@ const AvatarStyle = styled(MuiAvatar, {
 }));
 
 const avatars = [
-  "images/users/avatar-1.png",
-  "images/users/avatar-2.png",
-  "images/users/avatar-3.png",
-  "images/users/avatar-4.png",
-  "images/users/avatar-5.png",
+  avatar1,
+  avatar2,
+  avatar3,
+  avatar4,
+  avatar5,
 ];
 
 export interface Props extends AvatarProps {
@@ -123,7 +130,7 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
-  rotateAvatars = true, // 默认值为 false
+  rotateAvatars = false, // 默认值为 false
   ...others
 }: Props) {
   const theme = useTheme();
