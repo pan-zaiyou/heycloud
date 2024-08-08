@@ -107,7 +107,7 @@ export interface Props extends AvatarProps {
   color?: ColorProps;
   type?: AvatarTypeProps;
   size?: SizeProps;
-  rotateAvatars?: boolean;  // 新增属性用于控制是否轮询头像
+  rotateAvatars?: boolean;  // 控制是否轮询头像
 }
 
 export default function Avatar({
@@ -140,15 +140,15 @@ export default function Avatar({
     }
   }, [rotateAvatars]);
 
-  return (
+  return rotateAvatars ? (
     <AvatarStyle
       variant={variant}
       theme={theme}
       color={color}
       type={type}
       size={size}
-      src={rotateAvatars ? avatars[currentAvatarIndex] : others.src}
+      src={avatars[currentAvatarIndex]}
       {...others}
     />
-  );
+  ) : null;
 }
