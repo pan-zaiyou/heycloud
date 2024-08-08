@@ -37,10 +37,11 @@ const useStyles = makeStyles()((theme) => ({
 const UserList = () => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { tickets, currentId, setCurrentId, closeMenu } = useTicketContext(); // 获取 closeMenu 函数
+  const { tickets, currentId, setCurrentId, closeMenu } = useTicketContext(); // 确保从 context 中获取 closeMenu
   const { classes } = useStyles();
   const navigate = useNavigate();
 
+  // 获取日期差异的函数
   const getDateDiff = useCallback(
     (unix: number, key: string) => {
       const diffSec = dayjs().diff(dayjs.unix(unix), "second");
@@ -57,6 +58,7 @@ const UserList = () => {
     [t]
   );
 
+  // 获取颜色和背景色的函数
   const getColorClass = useCallback(
     (level: TicketLevel) => {
       switch (level) {
@@ -89,9 +91,9 @@ const UserList = () => {
             className={classes.listItemButton}
             selected={ticket.id === currentId}
             onClick={() => {
-              setCurrentId(ticket.id);
-              navigate(`/ticket/${ticket.id}`);
-              closeMenu(); // 点击时关闭菜单
+              setCurrentId(ticket.id); // 更新当前选中的 ticket
+              navigate(`/ticket/${ticket.id}`); // 导航到详情页面
+              closeMenu(); // 关闭菜单
             }}
           >
             <ListItemAvatar>
