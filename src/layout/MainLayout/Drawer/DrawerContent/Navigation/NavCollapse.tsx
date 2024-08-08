@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+
+// third-party
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+
+// material-ui
 import { useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -15,10 +19,16 @@ import {
   Popper,
   Typography
 } from "@mui/material";
+
+// project import
 import NavItem from "./NavItem";
 import Transitions from "@/components/@extended/Transitions";
 import { makeStyles } from "@/themes/hooks";
+
+// assets
 import { BorderOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+
+// types
 import { NavItemType } from "@/types/menu";
 import { RootStateProps } from "@/types/root";
 
@@ -100,6 +110,8 @@ const useStyles = makeStyles<{
   }
 }));
 
+// ==============================|| NAVIGATION - LIST COLLAPSE ||============================== //
+
 interface Props {
   menu: NavItemType;
   level: number;
@@ -163,14 +175,7 @@ const NavCollapse = ({ menu, level }: Props) => {
       case "collapse":
         return <NavCollapse key={item.id} menu={item} level={level + 1} />;
       case "item":
-        return (
-          <NavItem
-            key={item.id}
-            item={item}
-            level={level + 1}
-            onClick={() => setOpen(false)} // 自动折叠父菜单
-          />
-        );
+        return <NavItem key={item.id} item={item} level={level + 1} />;
       default:
         return (
           <Typography key={item.id} variant="h6" color="error" align="center">
