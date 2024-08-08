@@ -93,14 +93,14 @@ const AuthRegister = () => {
           .required(t("register.password_confirm_required").toString()),
         invite_code: siteConfig?.is_invite_force
           ? Yup.string()
-            .max(8, t("register.invite_code_max").toString())
-            .required(t("register.invite_code_required").toString())
+              .max(8, t("register.invite_code_max").toString())
+              .required(t("register.invite_code_required").toString())
           : Yup.string().max(8, t("register.invite_code_max").toString()),
         email_code: siteConfig?.is_email_verify
           ? Yup.string()
-            .max(6, t("register.email_code_max").toString())
-            .required(t("register.email_code_required").toString())
-          : Yup.string().max(6, t("register.email_code_max").toString())
+              .matches(/^\d{6}$/, t("register.email_code_invalid").toString())
+              .required(t("register.email_code_required").toString())
+          : Yup.string().notRequired() // or Yup.string().optional() depending on your needs
       }),
     [t, siteConfig?.is_invite_force, siteConfig?.is_email_verify]
   );
@@ -151,9 +151,7 @@ const AuthRegister = () => {
                 },
                 (error) => {
                   setStatus({ success: false });
-                  // Ensure errors are properly set for fields as well as the global error
                   setErrors(lo.isEmpty(error.errors) ? { submit: error.message } : error.errors);
-                  enqueueSnackbar(error.message, { variant: "error" }); // Show API error message at the top
                   ReactGA.event("register", {
                     category: "auth",
                     label: "register",
@@ -170,7 +168,6 @@ const AuthRegister = () => {
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors(lo.isEmpty(err.errors) ? { submit: err.message } : err.errors);
-              enqueueSnackbar(t("notice::register_failed"), { variant: "error" }); // Show a general error message at the top
             }
           } finally {
             setSubmitting(false);
@@ -230,8 +227,9 @@ const AuthRegister = () => {
                           width: "100%",
                           margin: "8px",
                           padding: "10px",
-                          border: `1px solid ${theme.palette.mode === "dark" ? theme.palette.grey[200] : theme.palette.grey[300]
-                            }`,
+                          border: `1px solid ${
+                            theme.palette.mode === "dark" ? theme.palette.grey[200] : theme.palette.grey[300]
+                          }`,
                           borderRadius: 4,
                           ":hover": {
                             borderColor: theme.palette.primary.main
@@ -244,7 +242,7 @@ const AuthRegister = () => {
                         }}
                       />
                       {touched.email_code && errors.email_code && (
-                        <FormHelperText error id="helper-text-email-code-signup">
+                        <FormHelperText error id="helper-text-email-signup">
                           {errors.email_code}
                         </FormHelperText>
                       )}
@@ -270,18 +268,22 @@ const AuthRegister = () => {
                       handleChange(e);
                       handlePasswordChange(e.target.value);
                     }}
-                    placeholder="Password"
+                    autoComplete={"new-password"}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
-                          edge="end"
+                          aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                          color="inherit"
                         >
                           {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                         </IconButton>
                       </InputAdornment>
                     }
+                    placeholder="******"
+                    inputProps={{}}
                   />
                   {touched.password && errors.password && (
                     <FormHelperText error id="helper-text-password-signup">
@@ -289,132 +291,128 @@ const AuthRegister = () => {
                     </FormHelperText>
                   )}
                 </Stack>
-                <Stack spacing={1}>
-                  {values.password && (
-                    <Box sx={{ mb: 1 }}>
-                      <Typography variant="subtitle2">{t("register.password_strength")}</Typography>
-                      <Stack direction="row" alignItems="center" spacing={1.5}>
-                        <Box
-                          sx={{
-                            width: `${level?.progress ?? 0}%`,
-                            height: 4,
-                            borderRadius: "4px",
-                            backgroundColor: level?.color
-                          }}
-                        />
-                        <Typography variant="caption">{t(level?.label)}</Typography>
-                      </Stack>
-                    </Box>
-                  )}
-                </Stack>
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                  <Grid container spacing={2} alignItems="center">
+                    <Grid item>
+                      <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: "7px" }} />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="subtitle1" fontSize="0.75rem">
+                        {t("register.password_strength", {
+                          context: lo.lowerCase(level?.label)
+                        }).toString()}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </FormControl>
               </Grid>
-              {/* Confirm Password */}
+              {/* Password Confirm */}
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-confirm-signup">
+                  <InputLabel htmlFor="password-confirm">
                     <Trans>{"register.password_confirm"}</Trans>
                   </InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password_confirm && errors.password_confirm)}
-                    id="password-confirm-signup"
-                    type="password"
+                    id="password-confirm"
+                    type={showPassword ? "text" : "password"}
                     value={values.password_confirm}
                     name="password_confirm"
                     onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Confirm Password"
+                    onChange={(e) => {
+                      handleChange(e);
+                      handlePasswordChange(e.target.value);
+                    }}
+                    autoComplete={"new-password"}
+                    placeholder="******"
+                    inputProps={{}}
                   />
                   {touched.password_confirm && errors.password_confirm && (
-                    <FormHelperText error id="helper-text-password-confirm-signup">
+                    <FormHelperText error id="helper-text-password-confirm">
                       {errors.password_confirm}
                     </FormHelperText>
                   )}
                 </Stack>
               </Grid>
-              {siteConfig?.is_invite_force && (
-                <Grid item xs={12}>
-                  <Stack spacing={1}>
-                    <InputLabel htmlFor="invite-code-signup">
-                      <Trans>{"register.invite_code"}</Trans>
-                    </InputLabel>
-                    <OutlinedInput
-                      fullWidth
-                      error={Boolean(touched.invite_code && errors.invite_code)}
-                      id="invite-code-signup"
-                      type="text"
-                      value={values.invite_code}
-                      name="invite_code"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      placeholder="Invite Code"
-                    />
-                    {touched.invite_code && errors.invite_code && (
-                      <FormHelperText error id="helper-text-invite-code-signup">
-                        {errors.invite_code}
-                      </FormHelperText>
-                    )}
-                  </Stack>
-                </Grid>
-              )}
+              {/* Invite Code */}
               <Grid item xs={12}>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={values.agree}
-                        onChange={handleChange}
-                        name="agree"
-                        color="primary"
-                      />
-                    }
-                    label={
-                      <Typography variant="body2">
-                        {t("register.agree_text")}
-                        <Link component={RouterLink} to="/terms" variant="body2">
-                          {t("register.terms")}
-                        </Link>
-                        {t("register.and")}
-                        <Link component={RouterLink} to="/privacy" variant="body2">
-                          {t("register.privacy")}
-                        </Link>
-                      </Typography>
-                    }
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="invite-code-signup" required={siteConfig?.is_invite_force === 1}>
+                    <Trans>{"register.invite_code"}</Trans>
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    error={Boolean(touched.invite_code && errors.invite_code)}
+                    id="invite-code-signup"
+                    type="text"
+                    value={values.invite_code}
+                    name="invite_code"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required={siteConfig?.is_invite_force === 1}
+                    placeholder={t("register.invite_code_placeholder", {
+                      context: siteConfig?.is_invite_force === 1 ? "required" : "optional"
+                    }).toString()}
+                    inputProps={{}}
+                    disabled={query.get("code") !== null}
                   />
-                  {touched.agree && errors.agree && (
-                    <FormHelperText error id="helper-text-agree">
-                      {errors.agree}
+                  {touched.invite_code && errors.invite_code && (
+                    <FormHelperText error id="helper-text-email-signup">
+                      {errors.invite_code}
                     </FormHelperText>
                   )}
                 </Stack>
               </Grid>
               <Grid item xs={12}>
+                <FormControlLabel
+                  value={false}
+                  control={<Checkbox />}
+                  name={"agree"}
+                  id={"agree"}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  aria-required={true}
+                  sx={{
+                    alignItems: "flex-start",
+                    "& .MuiCheckbox-root": {
+                      marginTop: "-7px" // 调整这个值来上移复选框
+                    }
+                  }}
+                  label={
+                    <Typography variant={"body2"}>
+                      <Trans i18nKey={"register.license_agree"}>
+                        <Link
+                          id={"terms-of-service"}
+                          variant="subtitle2"
+                          component={RouterLink}
+                          to="/terms-of-service"
+                        />
+                        <Link id={"privacy-policy"} variant="subtitle2" component={RouterLink} to="/privacy-policy" />
+                      </Trans>
+                    </Typography>
+                  }
+                />
+              </Grid>
+              {errors.submit && (
+                <Grid item xs={12}>
+                  <FormHelperText error>{errors.submit}</FormHelperText>
+                </Grid>
+              )}
+              <Grid item xs={12}>
                 <AnimateButton>
                   <Button
                     disableElevation
+                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
                     color="primary"
-                    disabled={isSubmitting}
                   >
-                    {isSubmitting && (
-                      <CircularProgress size={24} color="inherit" sx={{ position: "absolute" }} />
-                    )}
-                    {t("register.signup")}
+                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : <Trans>{"register.submit"}</Trans>}
                   </Button>
                 </AnimateButton>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body2" align="center">
-                  <Trans>
-                    Already have an account?{" "}
-                    <Link component={RouterLink} to="/auth/login">
-                      Login
-                    </Link>
-                  </Trans>
-                </Typography>
               </Grid>
             </Grid>
           </Box>
