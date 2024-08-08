@@ -103,13 +103,6 @@ const AvatarStyle = styled(MuiAvatar, {
   }),
 }));
 
-export interface Props extends AvatarProps {
-  color?: ColorProps;
-  type?: AvatarTypeProps;
-  size?: SizeProps;
-  rotateAvatars?: boolean;  // 控制是否轮询头像
-}
-
 const avatars = [
   "images/users/avatar-1.png",
   "images/users/avatar-2.png",
@@ -118,12 +111,19 @@ const avatars = [
   "images/users/avatar-5.png",
 ];
 
+export interface Props extends AvatarProps {
+  color?: ColorProps;
+  type?: AvatarTypeProps;
+  size?: SizeProps;
+  rotateAvatars?: boolean;  // 控制是否轮询头像
+}
+
 export default function Avatar({
   variant = "circular",
   color = "primary",
   type,
   size = "md",
-  rotateAvatars = true,
+  rotateAvatars = true, // 默认值为 false
   ...others
 }: Props) {
   const theme = useTheme();
@@ -139,15 +139,15 @@ export default function Avatar({
     }
   }, [rotateAvatars]);
 
-  return (
+  return rotateAvatars ? (
     <AvatarStyle
       variant={variant}
       theme={theme}
       color={color}
       type={type}
       size={size}
-      src={avatars[currentAvatarIndex]}
+      src={avatars[currentAvatarIndex]} // 使用轮询头像路径
       {...others}
     />
-  );
+  ) : null; // 不显示任何头像
 }
