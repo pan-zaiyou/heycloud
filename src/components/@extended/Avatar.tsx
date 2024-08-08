@@ -119,20 +119,11 @@ const AvatarStyle = styled(MuiAvatar, {
 
 export interface Props extends AvatarProps {
   color?: ColorProps;
-  children?: ReactNode;
+  children?: ReactNode | string;
   type?: AvatarTypeProps;
   size?: SizeProps;
-  src?: string;  // Add src property to accept image source
-  imageIndex?: number; // Add imageIndex property to select an image
+  showInitials?: boolean; // Add a prop to control initials visibility
 }
-
-const avatarImages = {
-  1: 'src/assets/images/users/avatar-1.png',
-  2: 'src/assets/images/users/avatar-2.png',
-  3: 'src/assets/images/users/avatar-3.png',
-  4: 'src/assets/images/users/avatar-4.png',
-  5: 'src/assets/images/users/avatar-5.png',
-};
 
 export default function Avatar({
   variant = "circular",
@@ -140,18 +131,17 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
-  src,
-  imageIndex, // Destructure imageIndex property
+  showInitials = false, // Default to hiding initials
   ...others
 }: Props) {
   const theme = useTheme();
   
-  // Determine image source based on imageIndex
-  const imageSrc = imageIndex ? avatarImages[imageIndex] : src;
+  // Check if initials should be displayed
+  const displayInitials = showInitials && typeof children === "string";
 
   return (
     <AvatarStyle variant={variant} theme={theme} color={color} type={type} size={size} {...others}>
-      {imageSrc ? <img src={imageSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : children}
+      {displayInitials ? children : null}  {/* Only show initials if displayInitials is true */}
     </AvatarStyle>
   );
 }
