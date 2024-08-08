@@ -11,6 +11,13 @@ import getColors from "@/utils/getColors";
 // types
 import { AvatarTypeProps, ColorProps, ExtendedStyleProps, SizeProps } from "@/types/extended";
 
+// 图像路径
+import avatar1 from "@/assets/images/users/avatar-1.png";
+import avatar2 from "@/assets/images/users/avatar-2.png";
+import avatar3 from "@/assets/images/users/avatar-3.png";
+import avatar4 from "@/assets/images/users/avatar-4.png";
+import avatar5 from "@/assets/images/users/avatar-5.png";
+
 // ==============================|| AVATAR - COLOR STYLE ||============================== //
 
 interface AvatarStyleProps extends ExtendedStyleProps {
@@ -122,6 +129,7 @@ export interface Props extends AvatarProps {
   children?: ReactNode | string;
   type?: AvatarTypeProps;
   size?: SizeProps;
+  imagePath?: "avatar-1" | "avatar-2" | "avatar-3" | "avatar-4" | "avatar-5";
 }
 
 export default function Avatar({
@@ -130,13 +138,30 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
+  imagePath,
   ...others
 }: Props) {
   const theme = useTheme();
 
+  // 根据 imagePath 选择图像
+  const imageSources: Record<string, string> = {
+    "avatar-1": avatar1,
+    "avatar-2": avatar2,
+    "avatar-3": avatar3,
+    "avatar-4": avatar4,
+    "avatar-5": avatar5
+  };
+
+  // 获取图像路径
+  const imgSrc = imagePath ? imageSources[imagePath] : undefined;
+
   return (
     <AvatarStyle variant={variant} theme={theme} color={color} type={type} size={size} {...others}>
-      {children}
+      {imgSrc ? (
+        <img src={imgSrc} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      ) : (
+        children
+      )}
     </AvatarStyle>
   );
 }
