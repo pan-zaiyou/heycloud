@@ -37,14 +37,9 @@ const useStyles = makeStyles()((theme) => ({
 const UserList = () => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { tickets, currentId, setCurrentId } = useTicketContext();
+  const { tickets, currentId, setCurrentId, closeMenu } = useTicketContext(); // 获取 closeMenu 函数
   const { classes } = useStyles();
   const navigate = useNavigate();
-
-  // 关闭菜单的函数
-  const closeMenu = () => {
-    // 这里添加关闭菜单的逻辑
-  };
 
   const getDateDiff = useCallback(
     (unix: number, key: string) => {
@@ -96,7 +91,7 @@ const UserList = () => {
             onClick={() => {
               setCurrentId(ticket.id);
               navigate(`/ticket/${ticket.id}`);
-              closeMenu(); // 在点击时关闭菜单
+              closeMenu(); // 点击时关闭菜单
             }}
           >
             <ListItemAvatar>
