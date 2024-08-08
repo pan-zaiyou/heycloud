@@ -146,7 +146,7 @@ export default function Avatar({
     }
   }, [rotateAvatars]);
 
-  return rotateAvatars ? (
+  return (
     <AvatarStyle
       variant={variant}
       theme={theme}
@@ -156,5 +156,5 @@ export default function Avatar({
       src={avatars[currentAvatarIndex]} // 使用轮询头像路径
       {...others}
     />
-  ) : null; // 不显示任何头像
+  );
 }
