@@ -69,6 +69,9 @@ const useStyles = makeStyles<{ drawerWidth: number }>()((theme, { drawerWidth })
   searchInput: {
     padding: theme.spacing(1.3125, 0, 1.5),
     color: theme.palette.text.primary
+  },
+  searchIcon: {
+    fontSize: "small"
   }
 }));
 
@@ -81,7 +84,7 @@ const ChatDrawer: React.FC = () => {
     drawerActions: { set: setDrawer },
     search,
     setSearch,
-    ticketsQuery: { data: tickets }
+    ticketsQuery: { data: tickets = [] } // Default to empty array if tickets is undefined
   } = useTicketContext();
 
   const matchDownLG = useMediaQuery(theme.breakpoints.down("lg"));
@@ -110,7 +113,7 @@ const ChatDrawer: React.FC = () => {
                     {t("ticket.drawer.title")}
                   </Typography>
                   <Chip
-                    label={tickets?.filter((ticket) => ticket.status === TicketStatus.Open).length ?? 0}
+                    label={tickets.filter((ticket) => ticket.status === TicketStatus.Open).length}
                     component="span"
                     color="secondary"
                     className={classes.titleChip}
@@ -126,9 +129,7 @@ const ChatDrawer: React.FC = () => {
                 id="input-search-header"
                 placeholder={t("ticket.drawer.search", { context: "placeholder" }).toString()}
                 value={search}
-                onChange={(event) => {
-                  setSearch(event.target.value);
-                }}
+                onChange={(event) => setSearch(event.target.value)}
                 sx={{
                   "& .MuiOutlinedInput-input": {
                     p: "10.5px 0px 12px",
@@ -137,7 +138,7 @@ const ChatDrawer: React.FC = () => {
                 }}
                 startAdornment={
                   <InputAdornment position="start">
-                    <SearchOutlined style={{ fontSize: "small" }} />
+                    <SearchOutlined className={classes.searchIcon} />
                   </InputAdornment>
                 }
               />
