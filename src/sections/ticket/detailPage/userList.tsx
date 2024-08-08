@@ -1,12 +1,20 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
+import React, { useCallback } from "react";
+
+// third-party
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
+
+// material-ui
 import { useTheme } from "@mui/material/styles";
 import { Avatar, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
+
+// project imports
 import Dot from "@/components/@extended/Dot";
 import { useTicketContext } from "./context";
 import { TicketLevel, TicketReplyStatus, TicketStatus } from "@/model/ticket";
 import { makeStyles } from "@/themes/hooks";
+
+// assets
 import { CheckOutlined, CommentOutlined, MessageOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -26,55 +34,74 @@ const useStyles = makeStyles()((theme) => ({
   }
 }));
 
-interface UserListProps {
-  onItemClick: () => void; // Add this prop
-}
-
-const UserList: React.FC<UserListProps> = ({ onItemClick }) => {
+const UserList = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { tickets, currentId, setCurrentId } = useTicketContext();
   const { classes, css, cx } = useStyles();
   const navigate = useNavigate();
 
-  const getDateDiff = (unix: number, key: string) => {
-    const diffSec = dayjs().diff(dayjs.unix(unix), "second");
-    switch (true) {
-      case diffSec < 60:
-        return t(key, { context: "just_now" });
-      case diffSec < 3600:
-        return t(key, { context: "minute", count: dayjs().diff(dayjs.unix(unix), "minute") });
-      case diffSec < 86400:
-        return t(key, { context: "hour", count: dayjs().diff(dayjs.unix(unix), "hour") });
-      case diffSec < 2592000:
-        return t(key, { context: "day", count: dayjs().diff(dayjs.unix(unix), "day") });
-      case diffSec < 31536000:
-        return t(key, { context: "month", count: dayjs().diff(dayjs.unix(unix), "month") });
-      default:
-        return t(key, { context: "year", count: dayjs().diff(dayjs.unix(unix), "year") });
-    }
-  };
+  const getDateDiff = useCallback(
+    (unix: number, key: string) => {
+      const diffSec = dayjs().diff(dayjs.unix(unix), "second");
+      switch (true) {
+        case diffSec < 60:
+          return t(key, {
+            context: "just_now"
+          });
+        case diffSec < 3600:
+          return t(key, {
+            context: "minute",
+            count: dayjs().diff(dayjs.unix(unix), "minute")
+          });
+        case diffSec < 86400:
+          return t(key, {
+            context: "hour",
+            count: dayjs().diff(dayjs.unix(unix), "hour")
+          });
+        case diffSec < 2592000:
+          return t(key, {
+            context: "day",
+            count: dayjs().diff(dayjs.unix(unix), "day")
+          });
+        case diffSec < 31536000:
+          return t(key, {
+            context: "month",
+            count: dayjs().diff(dayjs.unix(unix), "month")
+          });
+        default:
+          return t(key, {
+            context: "year",
+            count: dayjs().diff(dayjs.unix(unix), "year")
+          });
+      }
+    },
+    [t]
+  );
 
-  const getColorClass = (level: TicketLevel) => {
-    switch (level) {
-      case TicketLevel.Low:
-      default:
-        return css({
-          color: theme.palette.success.main,
-          backgroundColor: theme.palette.success.lighter
-        });
-      case TicketLevel.Medium:
-        return css({
-          color: theme.palette.warning.main,
-          backgroundColor: theme.palette.warning.lighter
-        });
-      case TicketLevel.High:
-        return css({
-          color: theme.palette.error.main,
-          backgroundColor: theme.palette.error.lighter
-        });
-    }
-  };
+  const getColorClass = useCallback(
+    (level: TicketLevel) => {
+      switch (level) {
+        case TicketLevel.Low:
+        default:
+          return css({
+            color: theme.palette.success.main,
+            backgroundColor: theme.palette.success.lighter
+          });
+        case TicketLevel.Medium:
+          return css({
+            color: theme.palette.warning.main,
+            backgroundColor: theme.palette.warning.lighter
+          });
+        case TicketLevel.High:
+          return css({
+            color: theme.palette.error.main,
+            backgroundColor: theme.palette.error.lighter
+          });
+      }
+    },
+    [theme.palette, css]
+  );
 
   return (
     <List component="nav">
@@ -86,7 +113,6 @@ const UserList: React.FC<UserListProps> = ({ onItemClick }) => {
             onClick={() => {
               setCurrentId(ticket.id);
               navigate(`/ticket/${ticket.id}`);
-              onItemClick(); // Call the function to close the sidebar
             }}
           >
             <ListItemAvatar>
@@ -101,6 +127,7 @@ const UserList: React.FC<UserListProps> = ({ onItemClick }) => {
                     {ticket.subject}
                   </Typography>
                   <Typography component="span" color="textSecondary" variant="caption">
+                    {/* TODO: last message */}
                     {t("ticket.drawer.reply_status", {
                       context:
                         ticket.status === TicketStatus.Closed
