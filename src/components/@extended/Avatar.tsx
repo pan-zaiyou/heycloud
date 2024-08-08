@@ -122,7 +122,6 @@ export interface Props extends AvatarProps {
   children?: ReactNode | string;
   type?: AvatarTypeProps;
   size?: SizeProps;
-  showInitials?: boolean; // Add a prop to control initials visibility
 }
 
 export default function Avatar({
@@ -131,17 +130,13 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
-  showInitials = false, // Default to hiding initials
   ...others
 }: Props) {
   const theme = useTheme();
-  
-  // Check if initials should be displayed
-  const displayInitials = showInitials && typeof children === "string";
 
   return (
     <AvatarStyle variant={variant} theme={theme} color={color} type={type} size={size} {...others}>
-      {displayInitials ? children : null}  {/* Only show initials if displayInitials is true */}
+      {children}
     </AvatarStyle>
   );
 }
