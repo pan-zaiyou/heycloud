@@ -20,44 +20,61 @@ import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles()((theme) => ({
   listItemButton: {
-    paddingLeft: theme.spacing(1),
+    paddingLeft: theme.spacing(1)
   },
   text: {
     overflow: "hidden",
     textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    whiteSpace: "nowrap"
   },
   iconAvatar: {
     width: theme.spacing(4.5),
     height: theme.spacing(4.5),
-    fontSize: "1rem",
-  },
+    fontSize: "1rem"
+  }
 }));
 
 const UserList = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { tickets, currentId, setCurrentId } = useTicketContext();
-  const { classes } = useStyles();
+  const { classes, css, cx } = useStyles();
   const navigate = useNavigate();
-
-  // 关闭菜单的函数
-  const closeMenu = () => {
-    // 这里添加关闭菜单的逻辑
-  };
 
   const getDateDiff = useCallback(
     (unix: number, key: string) => {
       const diffSec = dayjs().diff(dayjs.unix(unix), "second");
-      const formatDate = (context: string, count: number) =>
-        t(key, { context, count });
-
-      if (diffSec < 60) return formatDate("just_now", 0);
-      if (diffSec < 3600) return formatDate("minute", dayjs().diff(dayjs.unix(unix), "minute"));
-      if (diffSec < 86400) return formatDate("hour", dayjs().diff(dayjs.unix(unix), "hour"));
-      if (diffSec < 2592000) return formatDate("day", dayjs().diff(dayjs.unix(unix), "day"));
-      if (diffSec < 31536000) return formatDate("month", dayjs().diff(dayjs.unix(unix), "month"));
-      return formatDate("year", dayjs().diff(dayjs.unix(unix), "year"));
+      switch (true) {
+        case diffSec < 60:
+          return t(key, {
+            context: "just_now"
+          });
+        case diffSec < 3600:
+          return t(key, {
+            context: "minute",
+            count: dayjs().diff(dayjs.unix(unix), "minute")
+          });
+        case diffSec < 86400:
+          return t(key, {
+            context: "hour",
+            count: dayjs().diff(dayjs.unix(unix), "hour")
+          });
+        case diffSec < 2592000:
+          return t(key, {
+            context: "day",
+            count: dayjs().diff(dayjs.unix(unix), "day")
+          });
+        case diffSec < 31536000:
+          return t(key, {
+            context: "month",
+            count: dayjs().diff(dayjs.unix(unix), "month")
+          });
+        default:
+          return t(key, {
+            context: "year",
+            count: dayjs().diff(dayjs.unix(unix), "year")
+          });
+      }
     },
     [t]
   );
@@ -65,25 +82,25 @@ const UserList = () => {
   const getColorClass = useCallback(
     (level: TicketLevel) => {
       switch (level) {
-        case TicketLevel.Medium:
-          return {
-            color: theme.palette.warning.main,
-            backgroundColor: theme.palette.warning.lighter,
-          };
-        case TicketLevel.High:
-          return {
-            color: theme.palette.error.main,
-            backgroundColor: theme.palette.error.lighter,
-          };
         case TicketLevel.Low:
         default:
-          return {
+          return css({
             color: theme.palette.success.main,
-            backgroundColor: theme.palette.success.lighter,
-          };
+            backgroundColor: theme.palette.success.lighter
+          });
+        case TicketLevel.Medium:
+          return css({
+            color: theme.palette.warning.main,
+            backgroundColor: theme.palette.warning.lighter
+          });
+        case TicketLevel.High:
+          return css({
+            color: theme.palette.error.main,
+            backgroundColor: theme.palette.error.lighter
+          });
       }
     },
-    [theme.palette]
+    [theme.palette, css]
   );
 
   return (
@@ -96,14 +113,10 @@ const UserList = () => {
             onClick={() => {
               setCurrentId(ticket.id);
               navigate(`/ticket/${ticket.id}`);
-              closeMenu(); // 在点击时关闭菜单
             }}
           >
             <ListItemAvatar>
-              <Avatar
-                style={getColorClass(ticket.level)}
-                className={classes.iconAvatar}
-              >
+              <Avatar className={cx(getColorClass(ticket.level), classes.iconAvatar)}>
                 {ticket.reply_status === TicketReplyStatus.Replied ? <MessageOutlined /> : <CommentOutlined />}
               </Avatar>
             </ListItemAvatar>
@@ -114,6 +127,7 @@ const UserList = () => {
                     {ticket.subject}
                   </Typography>
                   <Typography component="span" color="textSecondary" variant="caption">
+                    {/* TODO: last message */}
                     {t("ticket.drawer.reply_status", {
                       context:
                         ticket.status === TicketStatus.Closed
