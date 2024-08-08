@@ -12,13 +12,7 @@ import { logout } from "@/store/reducers/auth";
 import config from "@/config";
 
 // assets
-import {
-  LogoutOutlined,
-  TransactionOutlined,
-  UsergroupAddOutlined,
-  UserOutlined,
-  WifiOutlined
-} from "@ant-design/icons";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
@@ -48,19 +42,9 @@ const MenuList: React.FC = () => {
         onClick: () => navigate("/profile")
       },
       {
-        icon: <TransactionOutlined />,
-        text: t("layout.header.profile.transaction_list"),
-        onClick: () => navigate("/order")
-      },
-      {
-        icon: <WifiOutlined />,
-        text: t("layout.header.profile.traffic_statistics"),
-        onClick: () => navigate("/traffic")
-      },
-      {
-        icon: <UsergroupAddOutlined />,
-        text: t("layout.header.profile.invitations"),
-        onClick: () => navigate("/invite")
+        icon: <LogoutOutlined />,
+        text: t("layout.header.profile.logout"),
+        onClick: handleLogout
       }
     ],
     [t]
@@ -81,19 +65,6 @@ const MenuList: React.FC = () => {
           </ListItemButton>
         </ListItem>
       ))}
-      <ListItem disablePadding>
-        <ListItemButton onClick={handleLogout}>
-          <ListItemIcon>
-            <LogoutOutlined />
-          </ListItemIcon>
-          <ListItemText
-            primary={t("layout.header.profile.logout")}
-            primaryTypographyProps={{
-              noWrap: true
-            }}
-          />
-        </ListItemButton>
-      </ListItem>
     </List>
   );
 };
