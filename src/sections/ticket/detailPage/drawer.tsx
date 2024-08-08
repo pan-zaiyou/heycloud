@@ -72,7 +72,11 @@ const useStyles = makeStyles<{ drawerWidth: number }>()((theme, { drawerWidth })
   }
 }));
 
-const ChatDrawer: React.FC = () => {
+interface ChatDrawerProps {
+  onMenuItemClick: () => void; // Add this prop to handle menu item click
+}
+
+const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuItemClick }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const {
@@ -152,7 +156,7 @@ const ChatDrawer: React.FC = () => {
             }}
           >
             <Box sx={{ p: 3, pt: 0 }}>
-              <UserList />
+              <UserList onItemClick={onMenuItemClick} />
             </Box>
           </SimpleBar>
         </MainCard>
