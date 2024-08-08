@@ -11,13 +11,6 @@ import getColors from "@/utils/getColors";
 // types
 import { AvatarTypeProps, ColorProps, ExtendedStyleProps, SizeProps } from "@/types/extended";
 
-// 图像路径
-import avatar1 from "@/assets/images/users/avatar-1.png";
-import avatar2 from "@/assets/images/users/avatar-2.png";
-import avatar3 from "@/assets/images/users/avatar-3.png";
-import avatar4 from "@/assets/images/users/avatar-4.png";
-import avatar5 from "@/assets/images/users/avatar-5.png";
-
 // ==============================|| AVATAR - COLOR STYLE ||============================== //
 
 interface AvatarStyleProps extends ExtendedStyleProps {
@@ -126,11 +119,20 @@ const AvatarStyle = styled(MuiAvatar, {
 
 export interface Props extends AvatarProps {
   color?: ColorProps;
-  children?: ReactNode | string;
+  children?: ReactNode;
   type?: AvatarTypeProps;
   size?: SizeProps;
-  imagePath?: "avatar-1" | "avatar-2" | "avatar-3" | "avatar-4" | "avatar-5";
+  src?: string;  // Add src property to accept image source
+  imageIndex?: number; // Add imageIndex property to select an image
 }
+
+const avatarImages = {
+  1: 'src/assets/images/users/avatar-1.png',
+  2: 'src/assets/images/users/avatar-2.png',
+  3: 'src/assets/images/users/avatar-3.png',
+  4: 'src/assets/images/users/avatar-4.png',
+  5: 'src/assets/images/users/avatar-5.png',
+};
 
 export default function Avatar({
   variant = "circular",
@@ -138,30 +140,18 @@ export default function Avatar({
   color = "primary",
   type,
   size = "md",
-  imagePath,
+  src,
+  imageIndex, // Destructure imageIndex property
   ...others
 }: Props) {
   const theme = useTheme();
-
-  // 根据 imagePath 选择图像
-  const imageSources: Record<string, string> = {
-    "avatar-1": avatar1,
-    "avatar-2": avatar2,
-    "avatar-3": avatar3,
-    "avatar-4": avatar4,
-    "avatar-5": avatar5
-  };
-
-  // 获取图像路径
-  const imgSrc = imagePath ? imageSources[imagePath] : undefined;
+  
+  // Determine image source based on imageIndex
+  const imageSrc = imageIndex ? avatarImages[imageIndex] : src;
 
   return (
     <AvatarStyle variant={variant} theme={theme} color={color} type={type} size={size} {...others}>
-      {imgSrc ? (
-        <img src={imgSrc} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      ) : (
-        children
-      )}
+      {imageSrc ? <img src={imageSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : children}
     </AvatarStyle>
   );
 }
