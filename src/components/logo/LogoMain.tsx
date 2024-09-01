@@ -20,8 +20,8 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        width="125" // 更新后的宽度
-        height="125" // 更新后的高度
+        width="120" // 更新后的宽度
+        height="120" // 更新后的高度
         viewBox="0 0 375 375" // 保持原来的 viewBox
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
