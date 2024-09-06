@@ -25,7 +25,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       />
       <span
         style={{
-          fontSize: '24px', // 调整为你想要的字体大小
+          fontSize: '15px', // 调整为你想要的字体大小
           fontWeight: 'bold', // 加粗
           marginLeft: '10px', // 根据需要调整间距
         }}
