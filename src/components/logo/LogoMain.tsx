@@ -23,7 +23,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
      *
      */
     <>
-      <img src={theme.palette.mode === 'dark' ? "暗黑模式logourl" : "亮色模式logourl"} alt="跨越长城" width="100" />
+      <img src={theme.palette.mode === 'dark' ? "暗黑模式logourl" : "亮色模式logourl"} alt="MOEU" width="100" />
     </>
   );
 };
