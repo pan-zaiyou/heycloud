@@ -27,7 +27,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
       />
       <span
         style={{
-          fontSize: '19px', // 调整为你想要的字体大小
+          fontSize: '20px', // 调整为你想要的字体大小
           fontWeight: 'bold', // 加粗
           marginLeft: '5px', // 根据需要调整间距
           color: isDarkMode ? '#fff' : '#000', // 暗黑模式下为白色，其他模式下为黑色
