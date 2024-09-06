@@ -29,6 +29,7 @@ const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
           fontWeight: 'bold', // 加粗
           marginLeft: '5px', // 根据需要调整间距
           color: '#000', // 设置字体颜色为黑色
+          fontFamily: '黑体, sans-serif', // 设置字体为黑体
         }}
       >
         跨越长城
