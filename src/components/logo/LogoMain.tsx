@@ -16,15 +16,23 @@ import { useTheme } from '@mui/material/styles';
 const LogoMain = ({ reverse, ...others }: { reverse?: boolean }) => {
   const theme = useTheme();
   return (
-    /**
-     * if you want to use image instead of svg uncomment following, and comment out <svg> element.
-     *
-     * <img src={theme.palette.mode === 'dark' ? logoDark : logo} alt="跨越长城" width="100" />
-     *
-     */
-    <>
-      <img src={theme.palette.mode === 'dark' ? "暗黑模式logourl" : "亮色模式logourl"} alt="跨越长城" width="100" />
-    </>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <img
+        src={theme.palette.mode === 'dark' ? "暗黑模式logourl" : "亮色模式logourl"}
+        alt="logo"
+        width="100"
+        {...others}
+      />
+      <span
+        style={{
+          fontSize: '24px', // 调整为你想要的字体大小
+          fontWeight: 'bold', // 加粗
+          marginLeft: '10px', // 根据需要调整间距
+        }}
+      >
+        跨越长城
+      </span>
+    </div>
   );
 };
 
