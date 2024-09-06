@@ -1,10 +1,10 @@
 <svg
-  fill="#000000"  <!-- 填充颜色 -->
-  width="105px"   <!-- SVG 宽度 -->
-  height="105px"  <!-- SVG 高度 -->
-  viewBox="-1.92 -1.92 35.84 35.84" <!-- 视口坐标 -->
-  xmlns="http://www.w3.org/2000/svg" <!-- XML 名称空间 -->
-  stroke="#000000" <!-- 边框颜色 -->
+  fill="#000000"
+  width="105px"
+  height="105px"
+  viewBox="-1.92 -1.92 35.84 35.84"
+  xmlns="http://www.w3.org/2000/svg"
+  stroke="#000000"
 >
   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
